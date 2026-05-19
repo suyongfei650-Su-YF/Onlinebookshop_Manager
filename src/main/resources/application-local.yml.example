@@ -1,0 +1,6 @@
+# 复制为 application-local.yml（已加入 .gitignore），覆盖数据库账号等本地配置
+spring:
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/bookshop_admin?useSSL=false&serverTimezone=Asia/Shanghai&characterEncoding=utf8&allowPublicKeyRetrieval=true
+    username: root
+    password: sufei520

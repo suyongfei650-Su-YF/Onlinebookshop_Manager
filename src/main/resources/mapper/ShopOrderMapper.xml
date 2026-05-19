@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bookshop.admin.mapper.ShopOrderMapper">
+
+  <sql id="adminOrderSelect">
+    SELECT
+      o.id,
+      o.order_no AS orderNo,
+      o.customer_id AS customerId,
+      c.nickname AS customerNickname,
+      c.username AS customerUsername,
+      c.avatar_url AS customerAvatarUrl,
+      o.total_amount AS totalAmount,
+      o.status,
+      o.receiver_name AS receiverName,
+      o.receiver_phone AS receiverPhone,
+      o.shipping_address AS shippingAddress,
+      o.payment_method AS paymentMethod,
+      o.created_at AS createdAt,
+      (SELECT COUNT(*) FROM order_item oi WHERE oi.order_id = o.id) AS itemCount
+    FROM shop_order o
+    INNER JOIN customer c ON c.id = o.customer_id
+  </sql>
+
+  <sql id="adminOrderWhere">
+    <where>
+      <if test="keyword != null and keyword != ''">
+        AND (
+          o.order_no LIKE CONCAT('%', #{keyword}, '%')
+          OR c.nickname LIKE CONCAT('%', #{keyword}, '%')
+          OR c.username LIKE CONCAT('%', #{keyword}, '%')
+          OR c.phone LIKE CONCAT('%', #{keyword}, '%')
+        )
+      </if>
+      <if test="status != null and status != ''">
+        AND o.status = #{status}
+      </if>
+    </where>
+  </sql>
+
+  <select id="selectByCustomerId" resultType="com.bookshop.admin.entity.ShopOrder">
+    SELECT id, order_no AS orderNo, customer_id AS customerId, total_amount AS totalAmount,
+           status, receiver_name AS receiverName, receiver_phone AS receiverPhone,
+           shipping_address AS shippingAddress, payment_method AS paymentMethod,
+           created_at AS createdAt
+    FROM shop_order
+    WHERE customer_id = #{customerId}
+    ORDER BY created_at DESC, id DESC
+  </select>
+
+  <select id="countAdminOrders" resultType="long">
+    SELECT COUNT(*)
+    FROM shop_order o
+    INNER JOIN customer c ON c.id = o.customer_id
+    <include refid="adminOrderWhere"/>
+  </select>
+
+  <select id="selectAdminOrderPage" resultType="com.bookshop.admin.dto.OrderAdminRow">
+    <include refid="adminOrderSelect"/>
+    <include refid="adminOrderWhere"/>
+    ORDER BY o.created_at DESC, o.id DESC
+    LIMIT #{offset}, #{size}
+  </select>
+
+  <select id="selectAdminOrderById" resultType="com.bookshop.admin.dto.OrderAdminRow">
+    <include refid="adminOrderSelect"/>
+    WHERE o.id = #{id}
+  </select>
+
+  <select id="countOrdersByStatus" resultType="com.bookshop.admin.dto.OrderStatusCount">
+    SELECT status, COUNT(*) AS count
+    FROM shop_order
+    GROUP BY status
+  </select>
+
+  <select id="sumTotalAmount" resultType="java.math.BigDecimal">
+    SELECT COALESCE(SUM(total_amount), 0)
+    FROM shop_order
+    WHERE status NOT IN ('CANCELLED', 'PENDING_PAY')
+  </select>
+
+  <select id="countTodayOrders" resultType="long">
+    SELECT COUNT(*)
+    FROM shop_order
+    WHERE DATE(created_at) = CURDATE()
+  </select>
+
+  <select id="sumTodayAmount" resultType="java.math.BigDecimal">
+    SELECT COALESCE(SUM(total_amount), 0)
+    FROM shop_order
+    WHERE DATE(created_at) = CURDATE()
+      AND status NOT IN ('CANCELLED', 'PENDING_PAY')
+  </select>
+
+  <select id="selectSalesLast7Days" resultType="com.bookshop.admin.dto.DashboardDayStat">
+    SELECT DATE_FORMAT(t.order_day, '%m-%d') AS day,
+           t.orderCount,
+           t.amount
+    FROM (
+      SELECT DATE(created_at) AS order_day,
+             COUNT(*) AS orderCount,
+             COALESCE(SUM(CASE WHEN status NOT IN ('CANCELLED', 'PENDING_PAY') THEN total_amount ELSE 0 END), 0) AS amount
+      FROM shop_order
+      WHERE created_at &gt;= DATE_SUB(CURDATE(), INTERVAL 6 DAY)
+      GROUP BY DATE(created_at)
+    ) t
+    ORDER BY t.order_day ASC
+  </select>
+
+  <select id="selectOrderCountLast7Days" resultType="com.bookshop.admin.dto.DashboardDayStat">
+    SELECT DATE_FORMAT(t.order_day, '%m-%d') AS day,
+           t.orderCount,
+           0 AS amount
+    FROM (
+      SELECT DATE(created_at) AS order_day,
+             COUNT(*) AS orderCount
+      FROM shop_order
+      WHERE created_at &gt;= DATE_SUB(CURDATE(), INTERVAL 6 DAY)
+      GROUP BY DATE(created_at)
+    ) t
+    ORDER BY t.order_day ASC
+  </select>
+
+  <select id="selectRecentOrders" resultType="com.bookshop.admin.dto.OrderAdminRow">
+    <include refid="adminOrderSelect"/>
+    ORDER BY o.created_at DESC, o.id DESC
+    LIMIT #{limit}
+  </select>
+</mapper>

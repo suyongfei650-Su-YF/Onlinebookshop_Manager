@@ -1,0 +1,53 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+.form-input-border {
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-bottom: 1px solid #d1c4be;
+  background: transparent;
+  transition: border-color 0.3s ease;
+}
+
+.form-input-border:focus {
+  outline: none;
+  border-bottom-color: #705c32;
+  box-shadow: none;
+}
+
+.stone-texture {
+  background-color: #faf9f7;
+  background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 86c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zm76-26c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM50 10c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zm8 88c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM15 52c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zm70 20c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM5 10c-1.105 0-2 .895-2 2s.895 2 2 2 2-.895 2-2-.895-2-2-2zm20 80c-1.105 0-2 .895-2 2s.895 2 2 2 2-.895 2-2-.895-2-2-2zm60-70c-1.105 0-2 .895-2 2s.895 2 2 2 2-.895 2-2-.895-2-2-2zm0 50c-1.105 0-2 .895-2 2s.895 2 2 2 2-.895 2-2-.895-2-2-2z' fill='%232c2420' fill-opacity='0.03' fill-rule='evenodd'/%3E%3C/svg%3E");
+}
+
+.side-nav-gradient {
+  background: linear-gradient(180deg, #2c2420 0%, #1a1614 100%);
+}
+
+.paper-texture {
+  background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuBTiOJtgtWdOjAJE1u6UhuauVDNvVowzOVK5EfKpCuWXA3WncEA0N6nXA4tcsJJRAskOP1onhJ8WDWdV9e2n9B5dswGVob5Pk3EHL_67F1WJf4FaJxVg6cM2JkYWg_tEAzF8LUO00xkc7weXOXMi2Krsz8DIlLUlS2jkZ0tK1jTtwIRWj4JZiaS3J0NRKJI9oR8EsDMk2XZGehT_kfV92tmEmm94ObhnE063gE1tNrwPVg6ymr1cOu-0JP0WUxRFFJV0OANVPWClQ);
+  background-color: #faf9f7;
+}
+
+.ink-wash-gradient {
+  background: radial-gradient(circle at top right, rgba(44, 36, 32, 0.03) 0%, transparent 70%),
+    radial-gradient(circle at bottom left, rgba(112, 92, 50, 0.05) 0%, transparent 50%);
+}
+
+.qr-frame::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  right: -10px;
+  bottom: -10px;
+  border: 1px solid #d1c4be;
+  opacity: 0.3;
+  pointer-events: none;
+}

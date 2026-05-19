@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+
+<html class="light" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&amp;family=Inter:wght@400;500&amp;family=Work+Sans:wght@500&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-bright": "#faf9f7",
+                        "surface-container-highest": "#e3e2e0",
+                        "on-tertiary-fixed": "#171c1f",
+                        "tertiary-fixed-dim": "#c3c7ca",
+                        "on-error-container": "#93000a",
+                        "tertiary-container": "#212629",
+                        "secondary-container": "#fcdfaa",
+                        "on-secondary-container": "#766237",
+                        "tertiary": "#0c1114",
+                        "on-primary-fixed": "#211a16",
+                        "surface-container-high": "#e9e8e6",
+                        "error": "#ba1a1a",
+                        "on-surface": "#1a1c1b",
+                        "surface-container-low": "#f4f3f1",
+                        "surface-tint": "#675c57",
+                        "error-container": "#ffdad6",
+                        "primary-fixed-dim": "#d2c4bd",
+                        "inverse-primary": "#d2c4bd",
+                        "outline-variant": "#d1c4be",
+                        "on-primary-container": "#978a85",
+                        "on-secondary-fixed-variant": "#57441d",
+                        "surface-variant": "#e3e2e0",
+                        "surface": "#faf9f7",
+                        "inverse-on-surface": "#f1f1ef",
+                        "inverse-surface": "#2f3130",
+                        "on-error": "#ffffff",
+                        "on-tertiary-container": "#888d90",
+                        "secondary-fixed": "#fcdfaa",
+                        "secondary-fixed-dim": "#dec390",
+                        "primary": "#160f0c",
+                        "surface-dim": "#dadad8",
+                        "tertiary-fixed": "#dfe3e6",
+                        "background": "#faf9f7",
+                        "on-surface-variant": "#4e4541",
+                        "on-primary-fixed-variant": "#4e4540",
+                        "on-secondary-fixed": "#261900",
+                        "surface-container": "#efeeec",
+                        "outline": "#7f7570",
+                        "on-tertiary": "#ffffff",
+                        "primary-fixed": "#efdfd9",
+                        "secondary": "#705c32",
+                        "primary-container": "#2c2420",
+                        "on-secondary": "#ffffff",
+                        "on-background": "#1a1c1b",
+                        "on-tertiary-fixed-variant": "#42474a",
+                        "on-primary": "#ffffff",
+                        "surface-container-lowest": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "container-max": "1280px",
+                        "section-gap": "120px",
+                        "stack-sm": "8px",
+                        "stack-md": "16px",
+                        "stack-lg": "32px",
+                        "margin-page": "64px",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter"],
+                        "headline-md": ["Manrope"],
+                        "body-lg": ["Inter"],
+                        "display-xl": ["Manrope"],
+                        "headline-lg": ["Manrope"],
+                        "label-sm": ["Work Sans"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "headline-md": ["24px", {"lineHeight": "1.4", "fontWeight": "500"}],
+                        "body-lg": ["18px", {"lineHeight": "1.7", "fontWeight": "400"}],
+                        "display-xl": ["48px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "500"}],
+                        "label-sm": ["12px", {"lineHeight": "1.0", "letterSpacing": "0.05em", "fontWeight": "500"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .active-tab {
+            color: #160f0c;
+            border-bottom: 2px solid #705c32;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md selection:bg-secondary-container selection:text-on-secondary-container">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full flex justify-between items-center px-16 py-6 h-20 bg-[#2C2420] dark:bg-stone-950 text-white dark:text-stone-100 docked full-width z-50 shadow-2xl shadow-stone-900/20">
+<div class="flex items-center gap-12">
+<span class="text-xl font-semibold tracking-[0.15em] text-white dark:text-stone-50 font-headline-md">馆藏书屋</span>
+<nav class="hidden md:flex items-center gap-8 font-['Manrope'] tracking-[0.05em] text-sm font-medium">
+<a class="text-stone-300 hover:text-white transition-all duration-300 ease-in-out hover:opacity-80" href="#">图书系列</a>
+<a class="text-stone-300 hover:text-white transition-all duration-300 ease-in-out hover:opacity-80" href="#">新品速递</a>
+<a class="text-stone-300 hover:text-white transition-all duration-300 ease-in-out hover:opacity-80" href="#">珍稀孤本</a>
+<a class="text-stone-300 hover:text-white transition-all duration-300 ease-in-out hover:opacity-80" href="#">读书日志</a>
+</nav>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative group">
+<span class="material-symbols-outlined transition-transform scale-95 active:scale-100 cursor-pointer" data-icon="search">search</span>
+</div>
+<span class="material-symbols-outlined transition-transform scale-95 active:scale-100 cursor-pointer" data-icon="shopping_cart">shopping_cart</span>
+<span class="material-symbols-outlined transition-transform scale-95 active:scale-100 cursor-pointer" data-icon="person">person</span>
+</div>
+</header>
+<main class="max-w-[1280px] mx-auto px-margin-page pt-[160px] pb-section-gap">
+<!-- Breadcrumb -->
+<nav class="mb-stack-lg flex items-center gap-2 text-on-surface-variant font-label-sm">
+<a class="hover:text-primary" href="#">首页</a>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<a class="hover:text-primary" href="#">图书系列</a>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="text-primary">哲学与伦理</span>
+</nav>
+<!-- Product Detail Section -->
+<section class="grid grid-cols-1 md:grid-cols-12 gap-16 items-start">
+<!-- Left: Large Cover Image -->
+<div class="md:col-span-5 lg:col-span-6 sticky top-32">
+<div class="aspect-[3/4] bg-surface-container-low shadow-stone-900/10 shadow-2xl relative overflow-hidden group">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="A premium hardbound book cover with minimalist typography and elegant foil stamping, set against a dark wooden shelf in a scholarly atmosphere. The lighting is soft and directional, highlighting the rich texture of the cloth-bound spine. The scene evokes a sense of timeless knowledge and luxury, consistent with a high-end contemporary library aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA3djuiqLXTSwC7_QG8yktncBoNeFwBnkput1qVQX0bC0zTmBi5qp6G9nQaj5rfTwWNhrBQe4knz0Yl1MzRJ7taa6bHFQCK6J6I6inf8HMCuY9T5u5J9UPTxjiYXDcCFN8UUX7l70gOSRcx8eFzZComS8fHCKmwIAhy-Mwz2GqTkSXrcUGAHo5q_Jqgj9_u8EorpnTPk1-Xpj9IyZGbUAHjwv1-TqIo8P2Do6ccsv30AzMHpqvbmf4fFe6_0vryBeKKkcuTtdaCzw"/>
+<div class="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+</div>
+</div>
+<!-- Right: Details -->
+<div class="md:col-span-7 lg:col-span-6 flex flex-col gap-stack-lg">
+<div class="flex flex-col gap-stack-sm">
+<h1 class="font-display-xl text-primary leading-tight">追寻生命的意义：维克多·弗兰克尔心理学经典</h1>
+<div class="flex flex-wrap gap-x-6 gap-y-2 text-on-surface-variant font-body-md border-b border-outline-variant pb-stack-md">
+<span>作者：[奥] 维克多·弗兰克尔</span>
+<span>出版社：三联书店</span>
+<span>标准书号：9787108064950</span>
+</div>
+</div>
+<!-- Pricing -->
+<div class="flex items-baseline gap-4 bg-surface-container-low p-stack-md rounded-lg">
+<span class="text-secondary font-headline-lg">¥ 48.00</span>
+<span class="text-on-surface-variant line-through text-body-md">¥ 58.00</span>
+<span class="ml-auto bg-secondary-container text-on-secondary-container font-label-sm px-3 py-1 rounded-full">8.3折</span>
+</div>
+<!-- Interaction Zone -->
+<div class="flex flex-col gap-stack-md mt-4">
+<div class="flex items-center gap-6">
+<span class="font-label-sm text-on-surface-variant uppercase">购买数量</span>
+<div class="flex items-center border border-outline rounded-lg h-12">
+<button class="px-4 hover:bg-surface-container transition-colors"><span class="material-symbols-outlined text-[18px]">remove</span></button>
+<span class="w-12 text-center font-headline-md">1</span>
+<button class="px-4 hover:bg-surface-container transition-colors"><span class="material-symbols-outlined text-[18px]">add</span></button>
+</div>
+</div>
+<div class="flex gap-4 items-stretch h-14">
+<button class="flex-[2] bg-primary text-white font-headline-md hover:bg-primary-container transition-all duration-300 active:scale-[0.98]">加入购物车</button>
+<button class="flex-[1] border-2 border-secondary text-secondary font-headline-md hover:bg-secondary-container transition-all duration-300 active:scale-[0.98]">立即购买</button>
+<button class="w-14 flex items-center justify-center border border-outline text-on-surface-variant hover:text-error hover:border-error transition-all duration-300 group">
+<span class="material-symbols-outlined group-hover:fill-current" data-icon="favorite">favorite</span>
+</button>
+</div>
+</div>
+<!-- Brief Info -->
+<div class="mt-8 border-t border-outline-variant pt-stack-lg">
+<p class="text-on-surface-variant leading-relaxed italic">
+                        “人类最后的自由，是在给定的环境下选择自己的态度的自由。” —— 弗兰克尔通过集中营的生死考验，阐述了对生命意义的终极关怀。
+                    </p>
+</div>
+</div>
+</section>
+<!-- Lower Section Tabs -->
+<section class="mt-section-gap">
+<div class="flex border-b border-outline-variant mb-stack-lg">
+<button class="px-8 py-4 font-headline-md active-tab transition-all">图书介绍</button>
+<button class="px-8 py-4 font-headline-md text-on-surface-variant hover:text-primary transition-all">目录</button>
+<button class="px-8 py-4 font-headline-md text-on-surface-variant hover:text-primary transition-all flex items-center gap-2">
+                    读者评价 <span class="font-label-sm bg-surface-container-high px-2 rounded-full text-[10px]">1,284</span>
+</button>
+</div>
+<!-- Tab Content: Intro (Active) -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-12 animate-in fade-in duration-700">
+<div class="md:col-span-8 flex flex-col gap-stack-lg">
+<div class="prose max-w-none text-on-surface leading-loose font-body-lg">
+<h3 class="font-headline-lg mb-4">关于本书</h3>
+<p class="mb-6">
+                            本书由奥地利神经学家、精神病学家维克多·弗兰克尔撰写。他曾是纳粹集中营的幸存者。在集中营里，他的父母、兄弟和妻子相继离去，他在极度痛苦和恶劣的环境下，发现了“意义疗法”。
+                        </p>
+<p class="mb-6">
+                            全书分为两部分：第一部分叙述了弗兰克尔在集中营的经历，他以心理学家的视角观察囚徒的心理反应；第二部分介绍了他的心理学流派——意义疗法。
+                        </p>
+</div>
+<div class="grid grid-cols-2 gap-8 mt-4">
+<div class="bg-surface-container p-stack-lg rounded-xl">
+<span class="font-label-sm uppercase text-secondary block mb-2">核心主题</span>
+<p class="font-headline-md">探索存在之义</p>
+</div>
+<div class="bg-surface-container p-stack-lg rounded-xl">
+<span class="font-label-sm uppercase text-secondary block mb-2">哲学流派</span>
+<p class="font-headline-md">存在主义心理学</p>
+</div>
+</div>
+</div>
+<!-- Sidebar for Content (Ratings Preview) -->
+<div class="md:col-span-4 flex flex-col gap-stack-lg">
+<div class="p-stack-lg bg-surface-container-low border border-outline-variant">
+<h4 class="font-headline-md mb-4 text-center">读者总评</h4>
+<div class="flex flex-col items-center gap-2">
+<span class="text-display-xl font-bold text-primary">4.9</span>
+<div class="flex gap-1 text-secondary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0.5;">star_half</span>
+</div>
+<span class="font-label-sm text-on-surface-variant">基于 1,284 条评论</span>
+</div>
+<div class="mt-6 flex flex-col gap-2">
+<div class="flex items-center gap-2">
+<span class="w-8 font-label-sm">5星</span>
+<div class="flex-1 h-2 bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-secondary w-[85%]"></div>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-8 font-label-sm">4星</span>
+<div class="flex-1 h-2 bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-secondary w-[12%]"></div>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-8 font-label-sm">3星</span>
+<div class="flex-1 h-2 bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-secondary w-[2%]"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Reviews Section -->
+<section class="mt-stack-lg pt-stack-lg border-t border-outline-variant">
+<h3 class="font-headline-lg mb-8">热门评价</h3>
+<div class="space-y-12">
+<!-- Review Item -->
+<div class="flex flex-col gap-4">
+<div class="flex justify-between items-start">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-surface-container-highest overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A clean, professional headshot of a person in a minimalist, architectural setting. The lighting is bright and crisp, with a soft grey background that emphasizes the person's serene expression. The aesthetic is contemporary and sophisticated, aligning with the scholar-focused design system." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBHZJZlRtz6DvCdEQ9s81OaD4jspCyofutAItAIBxlESYVCrYd8LtSvZsHkgFtHtzOKc0eSG5NdPiqjGTQqYyA3n5YPCJWXMsC64uEX8VmWcF2YibRtZMniOW7ejxcaL8_Gb2Pg68-Vnha5Bs2-eNCC9DQ5gxkgh95vxk-AhLRHXUPUP0e2O3fy3K7pYkmiYF0t_BrKgJARLBVJMDpDTVqKlNDObaie9AZbJEs6CA2PJBP5nt8bP8Xsg18GNirhNWCj9tyy2UgPew"/>
+</div>
+<div>
+<p class="font-headline-md text-sm">学者张三</p>
+<p class="text-on-surface-variant font-label-sm">2023年10月12日</p>
+</div>
+</div>
+<div class="flex text-secondary scale-75 origin-right">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+</div>
+<p class="text-on-surface leading-relaxed pl-16">
+                        这本书在人生低谷期给了我巨大的支持。不仅仅是心理学，更是哲学上的启发。翻译也非常流畅，完美还原了弗兰克尔的力量感。
+                    </p>
+</div>
+</div>
+<!-- Pagination -->
+<div class="mt-stack-lg flex justify-center gap-4 items-center">
+<button class="w-10 h-10 border border-outline rounded flex items-center justify-center hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<span class="font-label-sm">第 1 页，共 12 页</span>
+<button class="w-10 h-10 border border-outline rounded flex items-center justify-center hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full py-24 px-16 grid grid-cols-1 md:grid-cols-2 gap-8 items-end mt-[120px] bg-stone-50 dark:bg-stone-900 border-t border-stone-200 dark:border-stone-800 flat no shadows">
+<div>
+<span class="font-serif text-lg italic text-[#2C2420] dark:text-stone-100 block mb-4">馆藏书屋</span>
+<p class="font-['Manrope'] text-xs tracking-wider font-light leading-loose text-stone-500 dark:text-stone-400 max-w-sm">
+                © 2024 馆藏书屋。为敏锐的读者精心打造。
+            </p>
+</div>
+<div class="flex flex-wrap gap-8 justify-start md:justify-end">
+<a class="font-['Manrope'] text-xs tracking-wider font-light leading-loose text-stone-500 dark:text-stone-400 hover:text-[#2C2420] dark:hover:text-white transition-colors duration-300" href="#">隐私政策</a>
+<a class="font-['Manrope'] text-xs tracking-wider font-light leading-loose text-stone-500 dark:text-stone-400 hover:text-[#2C2420] dark:hover:text-white transition-colors duration-300" href="#">配送与退换货</a>
+<a class="font-['Manrope'] text-xs tracking-wider font-light leading-loose text-stone-500 dark:text-stone-400 hover:text-[#2C2420] dark:hover:text-white transition-colors duration-300" href="#">机构销售</a>
+<a class="font-['Manrope'] text-xs tracking-wider font-light leading-loose text-stone-500 dark:text-stone-400 hover:text-[#2C2420] dark:hover:text-white transition-colors duration-300" href="#">联系我们</a>
+</div>
+</footer>
+</body></html>

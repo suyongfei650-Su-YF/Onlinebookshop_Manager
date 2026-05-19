@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bookshop.admin.mapper.OrderItemMapper">
+
+  <select id="selectItemsByCustomerId" resultType="com.bookshop.admin.dto.UserOrderItemRow">
+    SELECT
+      oi.order_id AS orderId,
+      oi.book_id AS bookId,
+      b.title,
+      b.author,
+      b.cover_url AS coverUrl,
+      oi.quantity,
+      oi.unit_price AS unitPrice
+    FROM order_item oi
+    INNER JOIN shop_order o ON o.id = oi.order_id
+    INNER JOIN book b ON b.id = oi.book_id
+    WHERE o.customer_id = #{customerId}
+    ORDER BY oi.order_id DESC, oi.id ASC
+  </select>
+
+  <select id="selectItemsByOrderId" resultType="com.bookshop.admin.dto.UserOrderItemRow">
+    SELECT
+      oi.order_id AS orderId,
+      oi.book_id AS bookId,
+      b.title,
+      b.author,
+      b.cover_url AS coverUrl,
+      oi.quantity,
+      oi.unit_price AS unitPrice
+    FROM order_item oi
+    INNER JOIN book b ON b.id = oi.book_id
+    WHERE oi.order_id = #{orderId}
+    ORDER BY oi.id ASC
+  </select>
+
+  <select id="selectTopSellingBooks" resultType="com.bookshop.admin.dto.DashboardTopBookRow">
+    SELECT
+      b.id AS bookId,
+      b.title,
+      b.author,
+      b.cover_url AS coverUrl,
+      c.name AS categoryName,
+      b.price,
+      b.stock,
+      b.status,
+      COALESCE(SUM(oi.quantity), 0) AS soldQty
+    FROM order_item oi
+    INNER JOIN shop_order o ON o.id = oi.order_id
+    INNER JOIN book b ON b.id = oi.book_id
+    LEFT JOIN category c ON c.id = b.category_id
+    WHERE o.status NOT IN ('CANCELLED', 'PENDING_PAY')
+    GROUP BY b.id, b.title, b.author, b.cover_url, c.name, b.price, b.stock, b.status
+    ORDER BY soldQty DESC, b.id DESC
+    LIMIT #{limit}
+  </select>
+</mapper>

@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bookshop.admin.mapper.BookMapper">
+
+  <sql id="KeywordWhere">
+    <where>
+      <if test="kw != null and kw != ''">
+        (title LIKE CONCAT('%', #{kw}, '%')
+        OR author LIKE CONCAT('%', #{kw}, '%')
+        OR isbn LIKE CONCAT('%', #{kw}, '%'))
+      </if>
+      <if test="status != null and status != ''">
+        AND status = #{status}
+      </if>
+      <if test="categoryId != null">
+        AND category_id = #{categoryId}
+      </if>
+    </where>
+  </sql>
+
+  <select id="countByKeyword" resultType="long">
+    SELECT COUNT(*) FROM book
+    <include refid="KeywordWhere"/>
+  </select>
+
+  <select id="selectPageByKeyword" resultType="com.bookshop.admin.entity.Book">
+    SELECT
+      b.id,
+      b.category_id,
+      c.name AS categoryName,
+      b.title,
+      b.author,
+      b.isbn,
+      b.price,
+      b.stock,
+      b.status,
+      b.cover_url,
+      b.description,
+      b.created_at
+    FROM book b
+    LEFT JOIN category c ON c.id = b.category_id
+    <where>
+      <if test="kw != null and kw != ''">
+        (b.title LIKE CONCAT('%', #{kw}, '%')
+        OR b.author LIKE CONCAT('%', #{kw}, '%')
+        OR b.isbn LIKE CONCAT('%', #{kw}, '%'))
+      </if>
+      <if test="status != null and status != ''">
+        AND b.status = #{status}
+      </if>
+      <if test="categoryId != null">
+        AND b.category_id = #{categoryId}
+      </if>
+    </where>
+    ORDER BY b.id DESC
+    LIMIT #{limit} OFFSET #{offset}
+  </select>
+
+  <sql id="PortalWhere">
+    <where>
+      status = 'ON_SHELF'
+      <if test="kw != null and kw != ''">
+        AND (title LIKE CONCAT('%', #{kw}, '%')
+        OR author LIKE CONCAT('%', #{kw}, '%')
+        OR isbn LIKE CONCAT('%', #{kw}, '%'))
+      </if>
+      <if test="categoryId != null">
+        AND category_id IN (
+          SELECT id FROM category
+          WHERE id = #{categoryId} OR parent_id = #{categoryId}
+        )
+      </if>
+      <if test="priceMin != null">
+        AND price &gt;= #{priceMin}
+      </if>
+      <if test="priceMax != null">
+        AND price &lt;= #{priceMax}
+      </if>
+    </where>
+  </sql>
+
+  <select id="countPortal" resultType="long">
+    SELECT COUNT(*) FROM book
+    <include refid="PortalWhere"/>
+  </select>
+
+  <select id="selectPortalPage" resultType="com.bookshop.admin.entity.Book">
+    SELECT id, category_id, title, author, isbn, price, stock, status, cover_url, description, created_at
+    FROM book
+    <include refid="PortalWhere"/>
+    ORDER BY
+    <choose>
+      <when test="sort == 'price_asc'">price ASC, id DESC</when>
+      <when test="sort == 'price_desc'">price DESC, id DESC</when>
+      <when test="sort == 'title'">title ASC, id DESC</when>
+      <otherwise>id DESC</otherwise>
+    </choose>
+    LIMIT #{limit} OFFSET #{offset}
+  </select>
+
+  <select id="selectPortalCategoryStats" resultType="com.bookshop.admin.dto.PortalCategoryRow">
+    SELECT
+      c.id,
+      c.parent_id AS parentId,
+      c.name,
+      c.name_en AS nameEn,
+      c.sort_weight AS sortWeight,
+      (
+        SELECT COUNT(*)
+        FROM book b
+        WHERE b.status = 'ON_SHELF'
+          AND (
+            b.category_id = c.id
+            OR b.category_id IN (SELECT sc.id FROM category sc WHERE sc.parent_id = c.id)
+          )
+      ) AS bookCount
+    FROM category c
+    WHERE c.visible = 1
+    ORDER BY c.sort_weight ASC, c.id ASC
+  </select>
+
+  <select id="selectPortalBookDetail" resultType="com.bookshop.admin.dto.PortalBookDetail">
+    SELECT
+      b.id,
+      b.category_id AS categoryId,
+      c.name AS categoryName,
+      b.title,
+      b.author,
+      b.isbn,
+      b.price,
+      b.stock,
+      b.status,
+      b.cover_url AS coverUrl,
+      b.description,
+      b.created_at AS createdAt
+    FROM book b
+    LEFT JOIN category c ON c.id = b.category_id
+    WHERE b.id = #{id} AND b.status = 'ON_SHELF'
+  </select>
+</mapper>

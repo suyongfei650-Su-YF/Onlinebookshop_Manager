@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bookshop.admin.mapper.CustomerMapper">
+
+  <sql id="adminCustomerSelect">
+    SELECT
+      c.id,
+      c.nickname,
+      c.username,
+      c.email,
+      c.phone,
+      c.avatar_url AS avatarUrl,
+      c.role_tag AS roleTag,
+      c.status,
+      c.created_at AS createdAt,
+      c.updated_at AS updatedAt,
+      (SELECT COUNT(*) FROM shop_order o WHERE o.customer_id = c.id) AS orderCount
+    FROM customer c
+  </sql>
+
+  <sql id="adminCustomerWhere">
+    <where>
+      <if test="keyword != null and keyword != ''">
+        AND (
+          c.nickname LIKE CONCAT('%', #{keyword}, '%')
+          OR c.username LIKE CONCAT('%', #{keyword}, '%')
+          OR c.email LIKE CONCAT('%', #{keyword}, '%')
+          OR c.phone LIKE CONCAT('%', #{keyword}, '%')
+          OR CAST(c.id AS CHAR) LIKE CONCAT('%', #{keyword}, '%')
+        )
+      </if>
+      <if test="status != null and status != ''">
+        AND c.status = #{status}
+      </if>
+      <if test="roleTag != null and roleTag != ''">
+        AND c.role_tag = #{roleTag}
+      </if>
+    </where>
+  </sql>
+
+  <select id="countAdminCustomers" resultType="long">
+    SELECT COUNT(*)
+    FROM customer c
+    <include refid="adminCustomerWhere"/>
+  </select>
+
+  <select id="selectAdminCustomerPage" resultType="com.bookshop.admin.dto.AdminCustomerRow">
+    <include refid="adminCustomerSelect"/>
+    <include refid="adminCustomerWhere"/>
+    ORDER BY c.id DESC
+    LIMIT #{offset}, #{size}
+  </select>
+
+  <select id="selectAdminCustomerById" resultType="com.bookshop.admin.dto.AdminCustomerRow">
+    <include refid="adminCustomerSelect"/>
+    WHERE c.id = #{id}
+  </select>
+
+  <select id="countCustomersByStatus" resultType="map">
+    SELECT status, COUNT(*) AS cnt
+    FROM customer
+    GROUP BY status
+  </select>
+
+  <select id="countNewCustomersToday" resultType="long">
+    SELECT COUNT(*)
+    FROM customer
+    WHERE DATE(created_at) = CURDATE()
+  </select>
+</mapper>

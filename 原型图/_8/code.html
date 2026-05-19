@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+
+<html class="light" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&amp;family=Inter:wght@400;500&amp;family=Work+Sans:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-bright": "#faf9f7",
+                        "surface-container-highest": "#e3e2e0",
+                        "on-tertiary-fixed": "#171c1f",
+                        "tertiary-fixed-dim": "#c3c7ca",
+                        "on-error-container": "#93000a",
+                        "tertiary-container": "#212629",
+                        "secondary-container": "#fcdfaa",
+                        "on-secondary-container": "#766237",
+                        "tertiary": "#0c1114",
+                        "on-primary-fixed": "#211a16",
+                        "surface-container-high": "#e9e8e6",
+                        "error": "#ba1a1a",
+                        "on-surface": "#1a1c1b",
+                        "surface-container-low": "#f4f3f1",
+                        "surface-tint": "#675c57",
+                        "error-container": "#ffdad6",
+                        "primary-fixed-dim": "#d2c4bd",
+                        "inverse-primary": "#d2c4bd",
+                        "outline-variant": "#d1c4be",
+                        "on-primary-container": "#978a85",
+                        "on-secondary-fixed-variant": "#57441d",
+                        "surface-variant": "#e3e2e0",
+                        "surface": "#faf9f7",
+                        "inverse-on-surface": "#f1f1ef",
+                        "inverse-surface": "#2f3130",
+                        "on-error": "#ffffff",
+                        "on-tertiary-container": "#888d90",
+                        "secondary-fixed": "#fcdfaa",
+                        "secondary-fixed-dim": "#dec390",
+                        "primary": "#160f0c",
+                        "surface-dim": "#dadad8",
+                        "tertiary-fixed": "#dfe3e6",
+                        "background": "#faf9f7",
+                        "on-surface-variant": "#4e4541",
+                        "on-primary-fixed-variant": "#4e4540",
+                        "on-secondary-fixed": "#261900",
+                        "surface-container": "#efeeec",
+                        "outline": "#7f7570",
+                        "on-tertiary": "#ffffff",
+                        "primary-fixed": "#efdfd9",
+                        "secondary": "#705c32",
+                        "primary-container": "#2c2420",
+                        "on-secondary": "#ffffff",
+                        "on-background": "#1a1c1b",
+                        "on-tertiary-fixed-variant": "#42474a",
+                        "on-primary": "#ffffff",
+                        "surface-container-lowest": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "container-max": "1280px",
+                        "section-gap": "120px",
+                        "stack-sm": "8px",
+                        "stack-md": "16px",
+                        "stack-lg": "32px",
+                        "margin-page": "64px",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter"],
+                        "headline-md": ["Manrope"],
+                        "body-lg": ["Inter"],
+                        "display-xl": ["Manrope"],
+                        "headline-lg": ["Manrope"],
+                        "label-sm": ["Work Sans"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "headline-md": ["24px", {"lineHeight": "1.4", "fontWeight": "500"}],
+                        "body-lg": ["18px", {"lineHeight": "1.7", "fontWeight": "400"}],
+                        "display-xl": ["48px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "500"}],
+                        "label-sm": ["12px", {"lineHeight": "1.0", "letterSpacing": "0.05em", "fontWeight": "500"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .book-card-hover:hover .book-shelf-shadow {
+            opacity: 0.15;
+            transform: translateY(4px) scaleX(0.95);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #d1c4be;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md selection:bg-secondary-container selection:text-on-secondary-container">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full flex justify-between items-center px-16 py-6 h-20 bg-[#2C2420] dark:bg-stone-950 text-white dark:text-stone-100 font-['Manrope'] tracking-[0.05em] uppercase text-sm font-medium docked full-width top-0 z-50 shadow-2xl shadow-stone-900/20">
+<div class="text-xl font-semibold tracking-[0.15em] text-white dark:text-stone-50">馆藏书屋</div>
+<nav class="hidden md:flex items-center space-x-10">
+<a class="text-[#D4AF37] border-b-2 border-[#D4AF37] pb-1 transition-all duration-300 ease-in-out hover:opacity-80 scale-95 active:scale-100" href="#">图书合集</a>
+<a class="text-stone-300 hover:text-white transition-all duration-300 ease-in-out hover:opacity-80 scale-95 active:scale-100" href="#">新书上架</a>
+<a class="text-stone-300 hover:text-white transition-all duration-300 ease-in-out hover:opacity-80 scale-95 active:scale-100" href="#">珍本古籍</a>
+<a class="text-stone-300 hover:text-white transition-all duration-300 ease-in-out hover:opacity-80 scale-95 active:scale-100" href="#">阅读周刊</a>
+</nav>
+<div class="flex items-center space-x-6">
+<div class="relative flex items-center bg-white/5 px-4 py-2 rounded-full border border-white/10">
+<span class="material-symbols-outlined text-stone-400 text-lg mr-2">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-xs w-48 placeholder-stone-500" placeholder="搜索典籍..." type="text"/>
+</div>
+<span class="material-symbols-outlined cursor-pointer text-stone-300 hover:text-white transition-colors">shopping_cart</span>
+<span class="material-symbols-outlined cursor-pointer text-stone-300 hover:text-white transition-colors">person</span>
+</div>
+</header>
+<main class="max-w-[1280px] mx-auto px-margin-page pt-32 pb-section-gap">
+<div class="flex gap-16">
+<!-- Left Sidebar Filter -->
+<aside class="w-64 flex-shrink-0">
+<div class="sticky top-32">
+<h2 class="font-headline-md text-headline-md text-primary mb-stack-lg border-b border-outline-variant pb-4">筛选目录</h2>
+<div class="mb-10">
+<h3 class="font-label-sm text-label-sm uppercase text-outline mb-4">图书分类</h3>
+<ul class="space-y-3">
+<li><a class="flex justify-between items-center group" href="#"><span class="text-secondary font-medium">全部书籍</span><span class="text-xs text-outline-variant">1240</span></a></li>
+<li><a class="flex justify-between items-center group hover:text-secondary transition-colors" href="#"><span>文学经典</span><span class="text-xs text-outline-variant">420</span></a></li>
+<li><a class="flex justify-between items-center group hover:text-secondary transition-colors" href="#"><span>历史考古</span><span class="text-xs text-outline-variant">215</span></a></li>
+<li><a class="flex justify-between items-center group hover:text-secondary transition-colors" href="#"><span>哲学思辨</span><span class="text-xs text-outline-variant">158</span></a></li>
+<li><a class="flex justify-between items-center group hover:text-secondary transition-colors" href="#"><span>科学技术</span><span class="text-xs text-outline-variant">312</span></a></li>
+<li><a class="flex justify-between items-center group hover:text-secondary transition-colors" href="#"><span>艺术设计</span><span class="text-xs text-outline-variant">135</span></a></li>
+</ul>
+</div>
+<div class="mb-10">
+<h3 class="font-label-sm text-label-sm uppercase text-outline mb-4">价格区间 (¥)</h3>
+<div class="space-y-4">
+<div class="flex items-center gap-2">
+<input class="w-full bg-surface-container-low border-outline-variant text-xs py-2 px-3 focus:border-secondary focus:ring-0 transition-colors" placeholder="最低" type="text"/>
+<span class="text-outline-variant">—</span>
+<input class="w-full bg-surface-container-low border-outline-variant text-xs py-2 px-3 focus:border-secondary focus:ring-0 transition-colors" placeholder="最高" type="text"/>
+</div>
+<div class="flex flex-col gap-2">
+<label class="flex items-center gap-2 cursor-pointer group">
+<input class="rounded-sm border-outline-variant text-secondary focus:ring-secondary/20" type="checkbox"/>
+<span class="text-sm group-hover:text-primary transition-colors">¥0 - ¥50</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer group">
+<input class="rounded-sm border-outline-variant text-secondary focus:ring-secondary/20" type="checkbox"/>
+<span class="text-sm group-hover:text-primary transition-colors">¥50 - ¥150</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer group">
+<input class="rounded-sm border-outline-variant text-secondary focus:ring-secondary/20" type="checkbox"/>
+<span class="text-sm group-hover:text-primary transition-colors">¥150+</span>
+</label>
+</div>
+</div>
+</div>
+<div class="mb-10">
+<h3 class="font-label-sm text-label-sm uppercase text-outline mb-4">特别折扣</h3>
+<div class="flex flex-wrap gap-2">
+<button class="px-3 py-1.5 text-xs border border-outline-variant hover:border-secondary hover:text-secondary transition-all">九折以上</button>
+<button class="px-3 py-1.5 text-xs border border-secondary text-secondary bg-secondary-container/20">限时优惠</button>
+<button class="px-3 py-1.5 text-xs border border-outline-variant hover:border-secondary hover:text-secondary transition-all">清仓特卖</button>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<div class="flex-1">
+<!-- Sorting Bar -->
+<div class="flex justify-between items-center mb-10 border-b border-surface-container-highest pb-6">
+<div class="flex items-center space-x-8">
+<button class="text-primary font-medium border-b border-primary pb-1">综合排序</button>
+<button class="text-outline hover:text-primary transition-colors">销量</button>
+<div class="flex items-center gap-1 group cursor-pointer">
+<span class="text-outline group-hover:text-primary transition-colors">价格</span>
+<span class="material-symbols-outlined text-sm text-outline-variant">unfold_more</span>
+</div>
+<button class="text-outline hover:text-primary transition-colors">上架时间</button>
+</div>
+<div class="flex items-center gap-4">
+<span class="text-xs text-outline">共 1,240 件商品</span>
+<div class="flex items-center bg-surface-container px-2 py-1 gap-2">
+<button class="p-1 text-primary"><span class="material-symbols-outlined text-lg">grid_view</span></button>
+<button class="p-1 text-outline-variant"><span class="material-symbols-outlined text-lg">view_list</span></button>
+</div>
+</div>
+</div>
+<!-- Book Grid -->
+<div class="grid grid-cols-4 gap-x-gutter gap-y-16">
+<!-- Book Card 1 -->
+<div class="group book-card-hover">
+<div class="relative mb-6 overflow-hidden bg-surface-container-low p-6 aspect-[3/4] flex items-center justify-center">
+<img class="w-full h-full object-cover shadow-lg transition-transform duration-500 group-hover:scale-105" data-alt="A high-quality studio photograph of a premium hardcover book with a minimalist navy blue dust jacket featuring elegant gold typography. The book is angled slightly to show its spine and thick ivory pages. Soft directional lighting from the left creates a gentle shadow, emphasizing the tactile texture of the paper and the sophisticated scholarly aesthetic. The background is a clean, muted off-white surface that echoes a modern library setting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD9uGcVg5zsu1twKZTRDE2KjS5Qs0GTJc8gJpFjV7YvrA9zXfY_Cm5wYNI7GpTJxUAAgfzeuu5161QD8MB5zDk740R3Jx-d4-z3sIFBG-f7CThbxj1VJBrQ-eLJ7j6djC1LQ6MgYUBUB3H5g_jHkCKUTOQx-G1T5pDbiK6OsWCoGUam9ly5pel08njbkgWm33INQVzf3KDTTmfssglebuT9T_rYT477GEowhUkmV2OfPBRjImX1HvUdXt-KMCrfuRAnBzOo_A7zoQ"/>
+<div class="absolute bottom-0 left-0 w-full h-2 bg-black/5 blur-md opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<button class="absolute bottom-4 right-4 bg-primary text-white p-3 opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-300">
+<span class="material-symbols-outlined">add_shopping_cart</span>
+</button>
+</div>
+<h4 class="font-headline-md text-lg text-primary mb-1 truncate">时间简史：经典再临</h4>
+<p class="text-sm text-outline mb-3">史蒂芬·霍金 / 著</p>
+<div class="flex items-baseline gap-2">
+<span class="text-primary font-semibold">¥89.00</span>
+<span class="text-xs text-outline-variant line-through">¥128.00</span>
+</div>
+</div>
+<!-- Book Card 2 -->
+<div class="group book-card-hover">
+<div class="relative mb-6 overflow-hidden bg-surface-container-low p-6 aspect-[3/4] flex items-center justify-center">
+<img class="w-full h-full object-cover shadow-lg transition-transform duration-500 group-hover:scale-105" data-alt="An exquisite architectural book resting on a solid wood table, its cover displaying a black and white photograph of a modernist building. The book has a visible linen texture on its binding, illuminated by warm, late-afternoon sunlight streaming through a window. The overall mood is contemplative and intellectual, utilizing a palette of deep charcoal, natural wood tones, and crisp white to convey a sense of curated elegance." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAAkJLM0uLOhQmQce5kYP8ZRsqL8voXV7MrUrhREQTHZpObU-mQkazctNFEtlOza0mQqk4B7WI4QyJ3XumD5ykumdh8XWXvhzkInmAA8O4b2TftaoRe_miqx6KP9OOYhArgu7E7a-fh3reqsnQIfCK1KxiXruxlJk_dfAs1qooo6edaWa3vBysxhqYsbYGUQYomPDnEGDQP6REAEFf0e87WtQxWOpmhOK73bQPse36M62ZLMfNujLB-Z1PGF3K2njt54XChWW__eQ"/>
+<button class="absolute bottom-4 right-4 bg-primary text-white p-3 opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-300">
+<span class="material-symbols-outlined">add_shopping_cart</span>
+</button>
+</div>
+<h4 class="font-headline-md text-lg text-primary mb-1 truncate">现代建筑的轨迹</h4>
+<p class="text-sm text-outline mb-3">安藤忠雄 / 编</p>
+<div class="flex items-baseline gap-2">
+<span class="text-primary font-semibold">¥210.00</span>
+</div>
+</div>
+<!-- Book Card 3 -->
+<div class="group book-card-hover">
+<div class="relative mb-6 overflow-hidden bg-surface-container-low p-6 aspect-[3/4] flex items-center justify-center">
+<img class="w-full h-full object-cover shadow-lg transition-transform duration-500 group-hover:scale-105" data-alt="A collection of vintage leather-bound books stacked neatly on a dark mahogany shelf in a dimly lit, cozy personal library. Each book features gold-leaf embossing on its spine, shimmering faintly in the ambient light from a nearby desk lamp. The colors are rich ochre, deep crimson, and forest green, creating a warm, nostalgic atmosphere filled with the intellectual weight of classical literature." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCkh9-gQZEPORkhkbBfOY2GlyX4u_8dWkGy_roG8AHyqs2krgkvraUnLzCeD71PCJR5kAQURdOMBLUgvsHOjM27Y3mTei5cJtpxnxQBfn8yo03UH0N2ZuP84VnJV-rCzx2luWh9E094FB1FW0-J-j5w0Dp2whP0n0aiK4LTYWM2P8XOfzWgwShO1KManNnMyREF2dUySLrCAvMGjZrJq7BGBBpMZr7vs0nLVQdISBoJIn-ohIDUCSvlO5W6cij4vxBR_Mt-o0gldw"/>
+<button class="absolute bottom-4 right-4 bg-primary text-white p-3 opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-300">
+<span class="material-symbols-outlined">add_shopping_cart</span>
+</button>
+</div>
+<h4 class="font-headline-md text-lg text-primary mb-1 truncate">悲惨世界：典藏纪念版</h4>
+<p class="text-sm text-outline mb-3">维克多·雨果 / 著</p>
+<div class="flex items-baseline gap-2">
+<span class="text-primary font-semibold">¥358.00</span>
+</div>
+</div>
+<!-- Book Card 4 -->
+<div class="group book-card-hover">
+<div class="relative mb-6 overflow-hidden bg-surface-container-low p-6 aspect-[3/4] flex items-center justify-center">
+<img class="w-full h-full object-cover shadow-lg transition-transform duration-500 group-hover:scale-105" data-alt="A brightly colored children's book featuring whimsical, hand-painted illustrations of forest animals. The book is open on a light-colored wooden floor, surrounded by soft morning light. The vibrant oranges and soft greens of the illustration pop against the neutral background. The scene is cheerful and inviting, with a high-key lighting style that emphasizes a clean and safe modern nursery environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuARyIE-OkWdXePXg-n1leV8tEIXLy0e59g2HonkmyMW67Zkjalw8tncvAXI9c-p1XmDCV3OzSaQmaJueBtAq1vfObncDU2dGe7RNd9Cae4OuL1iU0inXg13EgMYfGh8tIoqrupoe7dfSbIr7xPJilryzhtDrbEmHAYfA7i7zlxdS92zb9o8965xOivZK525UuoYMiMRloe4TfRmcN2lfKPuW8cQCeN9IWhdoUujufjxJcNsGFa9xrjrwHcu0CWDk8aYyt2LRUHxyw"/>
+<button class="absolute bottom-4 right-4 bg-primary text-white p-3 opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-300">
+<span class="material-symbols-outlined">add_shopping_cart</span>
+</button>
+</div>
+<h4 class="font-headline-md text-lg text-primary mb-1 truncate">四季的森林</h4>
+<p class="text-sm text-outline mb-3">莫里斯·桑达克 / 绘</p>
+<div class="flex items-baseline gap-2">
+<span class="text-primary font-semibold">¥56.50</span>
+<span class="text-xs text-outline-variant line-through">¥78.00</span>
+</div>
+</div>
+<!-- Book Card 5 -->
+<div class="group book-card-hover">
+<div class="relative mb-6 overflow-hidden bg-surface-container-low p-6 aspect-[3/4] flex items-center justify-center">
+<img class="w-full h-full object-cover shadow-lg transition-transform duration-500 group-hover:scale-105" data-alt="A sleek, futuristic book cover design for a science fiction novel, showcasing a holographic abstract sphere floating in a void. The typography is ultra-modern and thin, in a silver foil finish. The image is captured with sharp focus and high contrast, using a palette of deep blacks and electric blues. It reflects a cutting-edge, tech-forward aesthetic suitable for high-end digital or physical book collections." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAdh8dU-CkJ7mpgQQhH3755elfQ6IG5aCDLHwidRZfMgk4X9fhfNq4cgQH6LMtueTL41pcnOQ14rZRiTfQdpmLw7mAtv8Amrjawz5NSO9E77LwGCoevYryVNBRpRh1qpiteqO76uR0WjCxNpLVV96ICog11att-5sh7U7XIHyTJAL_fDPOIwwag6yjN46SdjJZUEGNcWTmzoOeELeW3jYHqh4CRCIv1gX6M_l5E4OPEaewhnQxzq_1f2eAoA0VKSPfLGhfctGLqCA"/>
+<button class="absolute bottom-4 right-4 bg-primary text-white p-3 opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-300">
+<span class="material-symbols-outlined">add_shopping_cart</span>
+</button>
+</div>
+<h4 class="font-headline-md text-lg text-primary mb-1 truncate">赛博格之梦</h4>
+<p class="text-sm text-outline mb-3">威廉·吉布森 / 著</p>
+<div class="flex items-baseline gap-2">
+<span class="text-primary font-semibold">¥112.00</span>
+</div>
+</div>
+<!-- Book Card 6 -->
+<div class="group book-card-hover">
+<div class="relative mb-6 overflow-hidden bg-surface-container-low p-6 aspect-[3/4] flex items-center justify-center">
+<img class="w-full h-full object-cover shadow-lg transition-transform duration-500 group-hover:scale-105" data-alt="A thick reference book on history, featuring an embossed old world map on its dark brown cover. The book sits vertically on a minimalist shelf made of brushed steel. The lighting is focused and cinematic, highlighting the intricate details of the map and the grain of the cover material. The color scheme is dominated by earthy browns, muted golds, and steel grey, conveying a sense of authoritative knowledge and archival depth." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA1yfolyb_sndpxryfHEZWjIbdSVBAZMJMJkTeXBLL6gUTwUROMnqO6mamjvD5FmhNzU7Uxbul13gPXoTdWPieVtQFo6VnGdJEYQHKfIT1Ya8dSYLv_-AAJ0SJMB1nNplRbnPNs9Nxmbga8ZngDM5ZSBGFWgbLWh_WoluV3Ly2AkeZmUbzWSnoxyDAxczev98kU0SWi7Q6t7hC20RVQl-9q_SgTErMWO4kpXkeqdcRwEUteOc6Zcwb9rAXUw2xEkPSiz-RtieDO0w"/>
+<button class="absolute bottom-4 right-4 bg-primary text-white p-3 opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-300">
+<span class="material-symbols-outlined">add_shopping_cart</span>
+</button>
+</div>
+<h4 class="font-headline-md text-lg text-primary mb-1 truncate">大国政治的悲剧</h4>
+<p class="text-sm text-outline mb-3">约翰·米尔斯海默 / 著</p>
+<div class="flex items-baseline gap-2">
+<span class="text-primary font-semibold">¥145.00</span>
+</div>
+</div>
+<!-- Book Card 7 -->
+<div class="group book-card-hover">
+<div class="relative mb-6 overflow-hidden bg-surface-container-low p-6 aspect-[3/4] flex items-center justify-center">
+<img class="w-full h-full object-cover shadow-lg transition-transform duration-500 group-hover:scale-105" data-alt="A contemporary poetry book with a delicate, minimalist cover design featuring a single pressed flower on an eggshell-colored background. The book is presented in a flat-lay composition on a textured linen cloth. The lighting is soft and diffuse, creating a serene, peaceful mood. The pastel tones and fine lines of the design evoke a feeling of fragile beauty and scholarly intimacy." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAkl_-z_9FsHB0UBAbB9FYE1qf76seogJzb7YH26MLEUDcOY_j0pI5aOLoRIjkZv_kNxVUVSq4c-IO9dg1m7m55cYZt0kOC6pzz-M6YOd8olmT47lcipja2XGqA02AVNJvqi2Rk4JdM-JPUd3f3W1M6EBPierbslQWYFoMJvn4NVkOcOwmAU73iRJsc1jjow54xcb3tImNmqHkGClh-MaCmR90CPjI4dXTFcW4kXgajWKsQMSW5FI1f3e1v2UuYFcuJi7FXIxgyUg"/>
+<button class="absolute bottom-4 right-4 bg-primary text-white p-3 opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-300">
+<span class="material-symbols-outlined">add_shopping_cart</span>
+</button>
+</div>
+<h4 class="font-headline-md text-lg text-primary mb-1 truncate">万物静默如初</h4>
+<p class="text-sm text-outline mb-3">辛波斯卡 / 著</p>
+<div class="flex items-baseline gap-2">
+<span class="text-primary font-semibold">¥64.00</span>
+<span class="text-xs text-outline-variant line-through">¥82.00</span>
+</div>
+</div>
+<!-- Book Card 8 -->
+<div class="group book-card-hover">
+<div class="relative mb-6 overflow-hidden bg-surface-container-low p-6 aspect-[3/4] flex items-center justify-center">
+<img class="w-full h-full object-cover shadow-lg transition-transform duration-500 group-hover:scale-105" data-alt="A large-format art book with a matte black cover and a vibrant, glossy abstract painting reproduced on the front. The book is positioned on a glass coffee table, reflecting the bright, airy loft environment around it. The contrast between the matte black and the vivid colors of the art creates a striking visual impact. The lighting is high-key and modern, emphasizing the luxury and cultural significance of the publication." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCiPK_3Jp9zd7A9N9ouaA3Z-aqmpuZVNgi7glF0PcCe0HvbvruY7wDO6ONvuzTmJM-CGmncI35R5PsaybE9rN3BrThk8ANY6_jHkDzQ7d79n92lQrXOjFJBIPPc8o7FuiyF8kUCTSD5BHJwXqxciuxNvXLT53w3qDfZ_YhDhw9NbUaIDjxszoRrqUDQpAiDitgSYE10sqbFUJIh63Y09gLquNkJ0yralxEDWjnAE_fi8tkCZPVgpK0CoTzbcY33ZPlxOxAzIDPd0w"/>
+<button class="absolute bottom-4 right-4 bg-primary text-white p-3 opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-300">
+<span class="material-symbols-outlined">add_shopping_cart</span>
+</button>
+</div>
+<h4 class="font-headline-md text-lg text-primary mb-1 truncate">二十世纪艺术大赏</h4>
+<p class="text-sm text-outline mb-3">塔森出版社 / 编</p>
+<div class="flex items-baseline gap-2">
+<span class="text-primary font-semibold">¥420.00</span>
+</div>
+</div>
+</div>
+<!-- Pagination -->
+<nav class="mt-24 flex justify-center items-center gap-4">
+<button class="w-10 h-10 flex items-center justify-center border border-outline-variant text-outline hover:border-primary hover:text-primary transition-all">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<div class="flex items-center gap-2">
+<button class="w-10 h-10 flex items-center justify-center bg-primary text-white font-medium">1</button>
+<button class="w-10 h-10 flex items-center justify-center border border-outline-variant text-outline hover:border-primary hover:text-primary transition-all">2</button>
+<button class="w-10 h-10 flex items-center justify-center border border-outline-variant text-outline hover:border-primary hover:text-primary transition-all">3</button>
+<span class="px-2 text-outline-variant">...</span>
+<button class="w-10 h-10 flex items-center justify-center border border-outline-variant text-outline hover:border-primary hover:text-primary transition-all">12</button>
+</div>
+<button class="w-10 h-10 flex items-center justify-center border border-outline-variant text-outline hover:border-primary hover:text-primary transition-all">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</nav>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="w-full py-24 px-16 grid grid-cols-1 md:grid-cols-2 gap-8 items-end mt-[120px] bg-stone-50 dark:bg-stone-900 border-t border-stone-200 dark:border-stone-800 font-['Manrope'] text-xs tracking-wider font-light leading-loose">
+<div class="flex flex-col gap-6">
+<div class="font-serif text-lg italic text-[#2C2420] dark:text-stone-100">馆藏书屋</div>
+<p class="text-stone-500 dark:text-stone-400 max-w-sm">致力为全球藏书家与智识追求者提供最纯粹的阅读资源与最优雅的浏览体验。我们珍视每一本跨越时空而来的文字。</p>
+<div class="flex space-x-8 mt-4">
+<a class="text-stone-500 dark:text-stone-400 hover:text-[#2C2420] dark:hover:text-white transition-colors duration-300" href="#">隐私政策</a>
+<a class="text-stone-500 dark:text-stone-400 hover:text-[#2C2420] dark:hover:text-white transition-colors duration-300" href="#">配送与退货政策</a>
+<a class="text-stone-500 dark:text-stone-400 hover:text-[#2C2420] dark:hover:text-white transition-colors duration-300" href="#">机构采购服务</a>
+<a class="text-stone-500 dark:text-stone-400 hover:text-[#2C2420] dark:hover:text-white transition-colors duration-300" href="#">联系我们</a>
+</div>
+</div>
+<div class="md:text-right text-stone-500 dark:text-stone-400">
+        © 2024 馆藏书屋。 为每一位博学敏思的读者倾力打造。
+    </div>
+</footer>
+</body></html>

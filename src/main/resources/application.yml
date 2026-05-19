@@ -1,0 +1,55 @@
+spring:
+  config:
+    import: optional:classpath:application-local.yml
+  application:
+    name: onlinebookshop-manager
+  profiles:
+    # 外置 Tomcat 默认用 prod（不再加一层 context-path）。本地 mvn spring-boot:run 由 pom 里插件 jvmArguments 切到 dev
+    active: prod
+
+# MySQL 8：可用环境变量覆盖（IDEA Run → Environment variables）
+# MYSQL_URL / MYSQL_USER / MYSQL_PASSWORD
+  datasource:
+    url: ${MYSQL_URL:jdbc:mysql://127.0.0.1:3306/bookshop_admin?useSSL=false&serverTimezone=Asia/Shanghai&characterEncoding=utf8&allowPublicKeyRetrieval=true}
+    username: ${MYSQL_USER:root}
+    password: ${MYSQL_PASSWORD:sufei520}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 6MB
+
+# 是否开放管理员自助注册（演示默认 true，生产建议 false）
+app:
+  admin:
+    allow-register: true
+  # 图书封面上传目录（留空则自动：开发用 src/main/webapp/book-covers，否则 Tomcat 展开目录或用户目录）
+  book-covers-dir:
+
+mybatis-plus:
+  mapper-locations: classpath:/mapper/**/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+  global-config:
+    db-config:
+      id-type: auto
+
+---
+# 内嵌运行：与 Vite 代理路径一致
+spring:
+  config:
+    activate:
+      on-profile: dev
+server:
+  servlet:
+    context-path: /Onlinebookshop_Manager
+
+---
+# 外置 Tomcat：由 Tomcat 的 Application context 提供前缀，此处不再加一层
+spring:
+  config:
+    activate:
+      on-profile: prod
+server:
+  servlet:
+    context-path: /

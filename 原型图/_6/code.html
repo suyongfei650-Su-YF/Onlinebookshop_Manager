@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+
+<html class="light" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Manrope:wght@500;600;700&amp;family=Work+Sans:wght@500&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-bright": "#faf9f7",
+                        "surface-container-highest": "#e3e2e0",
+                        "on-tertiary-fixed": "#171c1f",
+                        "tertiary-fixed-dim": "#c3c7ca",
+                        "on-error-container": "#93000a",
+                        "tertiary-container": "#212629",
+                        "secondary-container": "#fcdfaa",
+                        "on-secondary-container": "#766237",
+                        "tertiary": "#0c1114",
+                        "on-primary-fixed": "#211a16",
+                        "surface-container-high": "#e9e8e6",
+                        "error": "#ba1a1a",
+                        "on-surface": "#1a1c1b",
+                        "surface-container-low": "#f4f3f1",
+                        "surface-tint": "#675c57",
+                        "error-container": "#ffdad6",
+                        "primary-fixed-dim": "#d2c4bd",
+                        "inverse-primary": "#d2c4bd",
+                        "outline-variant": "#d1c4be",
+                        "on-primary-container": "#978a85",
+                        "on-secondary-fixed-variant": "#57441d",
+                        "surface-variant": "#e3e2e0",
+                        "surface": "#faf9f7",
+                        "inverse-on-surface": "#f1f1ef",
+                        "inverse-surface": "#2f3130",
+                        "on-error": "#ffffff",
+                        "on-tertiary-container": "#888d90",
+                        "secondary-fixed": "#fcdfaa",
+                        "secondary-fixed-dim": "#dec390",
+                        "primary": "#160f0c",
+                        "surface-dim": "#dadad8",
+                        "tertiary-fixed": "#dfe3e6",
+                        "background": "#faf9f7",
+                        "on-surface-variant": "#4e4541",
+                        "on-primary-fixed-variant": "#4e4540",
+                        "on-secondary-fixed": "#261900",
+                        "surface-container": "#efeeec",
+                        "outline": "#7f7570",
+                        "on-tertiary": "#ffffff",
+                        "primary-fixed": "#efdfd9",
+                        "secondary": "#705c32",
+                        "primary-container": "#2c2420",
+                        "on-secondary": "#ffffff",
+                        "on-background": "#1a1c1b",
+                        "on-tertiary-fixed-variant": "#42474a",
+                        "on-primary": "#ffffff",
+                        "surface-container-lowest": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "container-max": "1280px",
+                        "section-gap": "120px",
+                        "stack-sm": "8px",
+                        "stack-md": "16px",
+                        "stack-lg": "32px",
+                        "margin-page": "64px",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter"],
+                        "headline-md": ["Manrope"],
+                        "body-lg": ["Inter"],
+                        "display-xl": ["Manrope"],
+                        "headline-lg": ["Manrope"],
+                        "label-sm": ["Work Sans"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "headline-md": ["24px", {"lineHeight": "1.4", "fontWeight": "500"}],
+                        "body-lg": ["18px", {"lineHeight": "1.7", "fontWeight": "400"}],
+                        "display-xl": ["48px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "500"}],
+                        "label-sm": ["12px", {"lineHeight": "1.0", "letterSpacing": "0.05em", "fontWeight": "500"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .text-shadow-scholarly {
+            text-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body class="bg-surface-bright text-on-surface font-body-md">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full flex justify-between items-center px-16 py-6 h-20 bg-[#2C2420] dark:bg-stone-950 text-white dark:text-stone-100 z-50 shadow-2xl shadow-stone-900/20">
+<div class="flex items-center gap-12">
+<h1 class="text-xl font-semibold tracking-[0.15em] text-white dark:text-stone-50 font-headline-md">馆藏书屋</h1>
+<nav class="hidden md:flex gap-8 font-['Manrope'] tracking-[0.05em] text-sm font-medium">
+<a class="text-[#D4AF37] border-b-2 border-[#D4AF37] pb-1 transition-all duration-300 ease-in-out hover:opacity-80" href="#">藏书分类</a>
+<a class="text-stone-300 hover:text-white transition-all duration-300 ease-in-out hover:opacity-80" href="#">新品上架</a>
+<a class="text-stone-300 hover:text-white transition-all duration-300 ease-in-out hover:opacity-80" href="#">珍稀版本</a>
+<a class="text-stone-300 hover:text-white transition-all duration-300 ease-in-out hover:opacity-80" href="#">阅读刊物</a>
+</nav>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative group">
+<input class="bg-stone-800/50 border-none text-white text-sm px-4 py-2 w-64 focus:ring-1 focus:ring-[#D4AF37] transition-all duration-300" placeholder="探索馆藏书籍..." type="text"/>
+<span class="material-symbols-outlined absolute right-3 top-2 text-stone-400 text-lg">search</span>
+</div>
+<div class="flex gap-4">
+<button class="relative scale-95 active:scale-100 transition-transform hover:opacity-80">
+<span class="material-symbols-outlined">shopping_cart</span>
+<span class="absolute -top-2 -right-2 bg-[#D4AF37] text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">2</span>
+</button>
+<button class="scale-95 active:scale-100 transition-transform hover:opacity-80">
+<span class="material-symbols-outlined">person</span>
+</button>
+</div>
+</div>
+</header>
+<main class="mt-20">
+<!-- Hero Carousel Section -->
+<section class="relative h-[870px] w-full overflow-hidden bg-primary">
+<div class="absolute inset-0 z-0">
+<img class="w-full h-full object-cover opacity-60" data-alt="A cinematic, high-angle view of a grand, multi-story classical library" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0vQT1hLhPIjNghLycSR1p_Lr2bC1mIpcLoaviY3xoZFO3RH1cMbyYxaGa0-fNY16dTQhhNX6C2HoEOMsBZjm3EKRqhViJKaw_TjptLOXV5hf4CaKJHj-Jy4wy5qIL5fDsJ31th0FdH4Txc3wb2w1nIc5xjdM7Y1BqbNk_ngf4uMk7ujOI4cn__k-atiPeq-T22CekGuxTZBUMoSe6kqsf4pKBMyAQ-aAY9TfJnGcDvhRSHPqRq83rWgrvov_N-DprZ4eY0zzsfg"/>
+</div>
+<div class="relative z-10 h-full flex flex-col justify-center px-16 max-w-container-max mx-auto">
+<span class="font-label-sm text-secondary tracking-[0.2em] uppercase mb-4">季度精选</span>
+<h2 class="font-display-xl text-white max-w-2xl mb-6 leading-tight">春季读书月：<br/>在墨香中感悟万物新生</h2>
+<p class="font-body-lg text-stone-300 max-w-xl mb-10">精选文学、哲学与自然志，邀您共赴一场跨越时空的思想盛宴。新会员首单享珍藏版礼品。</p>
+<div class="flex gap-6">
+<button class="bg-secondary text-white px-8 py-4 font-headline-md text-sm tracking-widest hover:opacity-90 transition-all duration-300">立即探索</button>
+<button class="border border-white text-white px-8 py-4 font-headline-md text-sm tracking-widest hover:bg-white hover:text-primary transition-all duration-300">查看活动详情</button>
+</div>
+</div>
+<!-- Progress Indicator -->
+<div class="absolute bottom-12 left-16 flex gap-4">
+<div class="w-12 h-[2px] bg-white"></div>
+<div class="w-12 h-[2px] bg-white/30"></div>
+<div class="w-12 h-[2px] bg-white/30"></div>
+</div>
+</section>
+<!-- New Arrivals Section (Asymmetric Bento Grid) -->
+<section class="max-w-container-max mx-auto px-16 py-[120px]">
+<div class="flex justify-between items-end mb-16">
+<div>
+<span class="font-label-sm text-secondary uppercase tracking-widest block mb-2">刚刚入藏</span>
+<h3 class="font-headline-lg text-primary">新书上架</h3>
+</div>
+<a class="font-label-sm text-outline hover:text-primary transition-colors" href="#">查看全部新品 →</a>
+</div>
+<div class="grid grid-cols-12 gap-8 h-[700px]">
+<div class="col-span-7 h-full relative group overflow-hidden bg-surface-container-low">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="A high-end studio photograph of a single, thick hardcover book" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCAdiR6ZlwJ0Qo_JLgncdxthJ0F1A94nO4lzDPK3Q0tPkNnmgamHRfGy7Qt3Toy8dA5RTngURzsoJT-3UQuPpVdV3NYwQZo0BSP4aQLDsNfNzJpjstyMrXsRdW2IMWjqALPmmy72bDMZiRndaHyuk11C6OGdCRDB6LQ9dbBzce-xbdG9goSQ3_ywJ8hbA4ryzFjV5084f-WtAOtLb-ao4uLAck99Q28oHHiG29dTLPUbJH5gqJfQJThKXGmX9eG8_leUwHiErY3SA"/>
+<div class="absolute bottom-0 left-0 p-10 bg-gradient-to-t from-primary/80 to-transparent w-full">
+<span class="text-secondary text-xs font-bold tracking-widest uppercase">重磅推荐</span>
+<h4 class="text-white text-2xl font-headline-md mt-2">现代美学论纲：从古典到未来</h4>
+<p class="text-stone-300 mt-2 font-body-md">陈墨 著 / 珍藏精装本</p>
+</div>
+</div>
+<div class="col-span-5 grid grid-rows-2 gap-8 h-full">
+<div class="bg-surface-container flex p-6 gap-6 group hover:shadow-xl transition-shadow duration-300">
+<img class="w-24 h-36 object-cover shadow-lg" data-alt="Close-up of a beautifully designed book cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCcKCgQVG_noWMMAKMW6xfdd4z0mR_8I1e6noUgKne__qzh0kZ--O6L8SOfo25GiT-TVVeyVrLj0WIYl7Fad8Iar6OjaivuBc80oDI8Nz0odHoELAA_-gCScfPW2AL80Lc1RovLU7OzP6Dv_MlS6pgtkqkCuTh2SD2oAGCfh6LUSRo75-o069jd-VBTRnIi_mAGT_o-owr0lXVgT0mDURrEdWvMDQ5IlAIcWZAXdoMyUZ7SHyC_L6uW7sWoLMJqn9tUaQG2Su6n6w"/>
+<div class="flex flex-col justify-center">
+<span class="text-secondary font-label-sm">文学馆</span>
+<h5 class="text-primary font-headline-md text-lg mt-1">追寻逝去的时光</h5>
+<p class="text-outline text-sm mt-1">¥ 128.00</p>
+<button class="mt-4 text-xs font-bold border-b border-primary w-fit pb-1 opacity-0 group-hover:opacity-100 transition-opacity">快速加入</button>
+</div>
+</div>
+<div class="bg-surface-container flex p-6 gap-6 group hover:shadow-xl transition-shadow duration-300">
+<img class="w-24 h-36 object-cover shadow-lg" data-alt="A minimalist book cover featuring a simple charcoal sketch" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD9__qJcYgcty4rI8rUtkIGtyc329pd6rjGN_lcmqWLLL_Ph9FTbFLg8BcfE1Jqo0I2GoOBkZf68l2P0DQMRna1P5zm8EK8AP6-1sKR1-PtxcIFNManQuB423TQl4z4K5fX9e8kiu5vkznLE38FvPeyu61IIGFE76P4QWU0_t4uDcm1DKfe1UiYCoJRxP_TluYC16gOuOEJRr56LwgEBHt3VgJdDLQ29gOubmFCSrMScuKQcNrQQcQ-q7BtHNiZXErESv5tzABdtw"/>
+<div class="flex flex-col justify-center">
+<span class="text-secondary font-label-sm">社会科学</span>
+<h5 class="text-primary font-headline-md text-lg mt-1">寂静的春天</h5>
+<p class="text-outline text-sm mt-1">¥ 65.00</p>
+<button class="mt-4 text-xs font-bold border-b border-primary w-fit pb-1 opacity-0 group-hover:opacity-100 transition-opacity">快速加入</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Best Sellers (Ranked Style) -->
+<section class="bg-surface-container py-[120px]">
+<div class="max-w-container-max mx-auto px-16">
+<div class="text-center mb-16">
+<span class="font-label-sm text-secondary tracking-[0.3em] uppercase">馆藏流行趋势</span>
+<h3 class="font-headline-lg text-primary mt-2">热销榜单</h3>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-5 gap-12">
+<!-- Rank 1 -->
+<div class="flex flex-col items-center group">
+<div class="relative mb-6">
+<span class="absolute -left-6 top-0 font-display-xl text-surface-container-highest italic leading-none z-0">01</span>
+<img class="w-48 h-64 object-cover shadow-2xl relative z-10 transition-transform duration-300 group-hover:-translate-y-2" data-alt="A vibrant book cover for a best-selling novel" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCiSSDKxvA2m8LbdACg1P-ntVLbuWPQL02uhpwN1drDpk8pRD7J_NbG5c12spcaq64R4Gb8IK65JVgHZI05-x90IL2PPkAR_Fc3NtwgAY1KTdc75wRJeXk4JbsFnqfeCa0P2M8PJ6mNXygzYnmZ8uYmmtdZ-0cGG9wi_6O6YMvvcGSWJ27lJUjEBL4EGAkS21YWzVWFcmQw-pdDq7EYCdTfsn5Xi6LxnnYaV1D11Q19HB_mujMmGDK1585x8dIM_4YovJvhznJSdg"/>
+</div>
+<h4 class="font-headline-md text-base text-primary text-center">万历十五年</h4>
+<p class="text-outline text-xs mt-1">黄仁宇</p>
+</div>
+<!-- Rank 2 -->
+<div class="flex flex-col items-center group">
+<div class="relative mb-6">
+<span class="absolute -left-6 top-0 font-display-xl text-surface-container-highest italic leading-none z-0">02</span>
+<img class="w-48 h-64 object-cover shadow-2xl relative z-10 transition-transform duration-300 group-hover:-translate-y-2" data-alt="A sleek book cover with a deep emerald green texture" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDzMfvAph4caQOPTSMqiOzv96Jki-aW4KM7TLLHXlF21GQl0zIGaScWKgrBLlbZkRlXDYWKfKKmwAfGeV2Jft-Wvjwp0-TZxMWmgFL3ajyNHabtZDhxEhvKxmoSVLf-4J0Aznk371Bxnp_sf699tHfgNQEq6b95y91aDD2y56dQ-BLVhvlEbyjaAMXz2SWMoWVgMBXaAIwJh0cyzzv3uhxefXtsFvktuji3tUaA7ho5H_6RR56HjM_qd9cu2G6lo_dKp6-DWAASoQ"/>
+</div>
+<h4 class="font-headline-md text-base text-primary text-center">人类简史</h4>
+<p class="text-outline text-xs mt-1">尤瓦尔·赫拉利</p>
+</div>
+<!-- Rank 3 -->
+<div class="flex flex-col items-center group">
+<div class="relative mb-6">
+<span class="absolute -left-6 top-0 font-display-xl text-surface-container-highest italic leading-none z-0">03</span>
+<img class="w-48 h-64 object-cover shadow-2xl relative z-10 transition-transform duration-300 group-hover:-translate-y-2" data-alt="A contemporary book cover with striking minimalist architectural photography" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD5l7ws5ENlxEd5S7xYf8aetHtJyrdRqIoqKGqkY2Q9db7JydJ_hZV7GhWdHgZxgmVNQeZxx2yB8xarUC799DZSQ071O_q_v3BmnSmQa-VomJt2d2cBpHLXAOwlWcTy7-K3MkJCi6thOqBh8VpUNXnK4BYsQPXnmeotMseZIn7hY4HIiirzTAWHXJhJI0NfNR8dHkBoDnZzPZWF9dTeYEW3IZTGNn2zjx9y7me7u_Hg2-2Uba8bt7t_3ghall_vkkCifK0CmoFhLw"/>
+</div>
+<h4 class="font-headline-md text-base text-primary text-center">设计心理学</h4>
+<p class="text-outline text-xs mt-1">唐纳德·诺曼</p>
+</div>
+<!-- Rank 4 -->
+<div class="flex flex-col items-center group">
+<div class="relative mb-6">
+<span class="absolute -left-6 top-0 font-display-xl text-surface-container-highest italic leading-none z-0">04</span>
+<img class="w-48 h-64 object-cover shadow-2xl relative z-10 transition-transform duration-300 group-hover:-translate-y-2" data-alt="A poetic book cover for a literature classic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDiOjbOyo0sHgchSNcTvDG9Be7yb2dAdPQqLUlpyyTHmvZADR2L467TBGdkDBve17kx1aEiK0qbA9iC9KDmylSDB1LUeb7YiIhLLPXcsNr5CYd9z7QyR-6XjSP0UmNaka_8l0rnmZWtP90X58_Uqmuaq96UE-G-NK7WxYADH7GH6QJf1QEwTpo_w-H00bq9fNF2kRU_Ubmjz7qDYiy47g2pe9ZuBS6MH_V9a4Qr0U2IDx_XqLMq5Sr1HlorMgM6p7STSp3EPwLnqw"/>
+</div>
+<h4 class="font-headline-md text-base text-primary text-center">挪威的森林</h4>
+<p class="text-outline text-xs mt-1">村上春树</p>
+</div>
+<!-- Rank 5 -->
+<div class="flex flex-col items-center group">
+<div class="relative mb-6">
+<span class="absolute -left-6 top-0 font-display-xl text-surface-container-highest italic leading-none z-0">05</span>
+<img class="w-48 h-64 object-cover shadow-2xl relative z-10 transition-transform duration-300 group-hover:-translate-y-2" data-alt="A technical yet elegant book cover for a science book" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDPxdaS1CCAFu3YW1sCdkwfxQTm-Q5Vse9g9m6ymjCNjFMe2TkAW0KneRHsmEkAlZNqRzTLOxUWTm6wsdVqXhvtGJ6sogKS3fvVUYGm7hlzjD3OsINzcHl2nAerZ1TeICi5_nCGAK2YLv3X0OfSmXmYP__Cbp0fHhKWk45E7hF6LM6nn11ZzfXkS_h8arebHNrYHpRLzA-UdVinHHs1tzHogai9vy3-oKrHn1pxI-JsIhM_kWgu6lxV6-2ddQ5wpX5ACbFXaHABow"/>
+</div>
+<h4 class="font-headline-md text-base text-primary text-center">自私的基因</h4>
+<p class="text-outline text-xs mt-1">理查德·道金斯</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Category Recommendations (Editorial Style) -->
+<section class="max-w-container-max mx-auto px-16 py-[120px]">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+<div class="relative group h-[500px] overflow-hidden flex flex-col justify-end p-8 text-white">
+<img class="absolute inset-0 w-full h-full object-cover z-0 transition-transform duration-700 group-hover:scale-110" data-alt="An atmospheric, close-up shot of an artist's workspace" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA7rk5Yng7YH4ZPh5tqmNCthUr62nNuebHrcODxDkTJTNa8nSK7B1mchFOOZgPf0FwQZ-qwKRtlWcoir2Jue5b1KkKL5mVrHEznNJd_x7PcEGow7ppo4KqUCCaoih70Bc4OkcB4pXVfhbSJFhVAAARQceuTo__AdhQWn2uFF-q0rhsU6sstLXos59UtelDYCDIV3j5CJHFueEFN5xZCgfcWYKpUGLHXeCoZ6ObF5pPx1WEhHcNH8Lcq1mF48cZ0OgeARHTL8ZyoDQ"/>
+<div class="relative z-10">
+<span class="font-label-sm tracking-widest uppercase opacity-80">分类</span>
+<h4 class="font-headline-lg mb-4">艺术与设计</h4>
+<p class="font-body-md mb-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">探索形式、色彩与灵魂的交织，收录全球顶尖艺评与画册。</p>
+<a class="text-xs font-bold border-b border-white pb-1 w-fit" href="#">浏览系列</a>
+</div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-[5]"></div>
+</div>
+<div class="relative group h-[500px] overflow-hidden flex flex-col justify-end p-8 text-white">
+<img class="absolute inset-0 w-full h-full object-cover z-0 transition-transform duration-700 group-hover:scale-110" data-alt="A high-contrast, moody image of an antique writing desk" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCrsNzK3o9d2zZyf7BzgGGKcltpM6qo85Baz2kP7jlrc--9G14HTvwA31nduvBNiApL0cvIU0l6nYLRCwbJfrSehYmMRPsPygYljJzzvlhuvb-PNvR23FdmBNDZrKM_fX4Vsezd60i0KbNs_SoIKV623dyTELwPh6vj1hE-tN5fmrVvPDk_5wARBWrOfDAVQdJBjI5v8s2ZWfbzMWk35qbar97zNZn9H1sti44qsHV60b1qhlwZ2n73ELyMganxT6U6_ETiXeo_Bw"/>
+<div class="relative z-10">
+<span class="font-label-sm tracking-widest uppercase opacity-80">分类</span>
+<h4 class="font-headline-lg mb-4">经典文学</h4>
+<p class="font-body-md mb-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">与伟大的思想同行，重温那些跨越世纪的文学瑰宝。</p>
+<a class="text-xs font-bold border-b border-white pb-1 w-fit" href="#">浏览系列</a>
+</div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-[5]"></div>
+</div>
+<div class="relative group h-[500px] overflow-hidden flex flex-col justify-end p-8 text-white">
+<img class="absolute inset-0 w-full h-full object-cover z-0 transition-transform duration-700 group-hover:scale-110" data-alt="A clean, futuristic image of a modern laboratory" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBn-ljaO5Aoymc_ZOXEuRAQaSxWu5nQo7_bk2yzHxgPtBBRg-2SwZyZ3v_t5otLPB85dsnVwylgdNm6Dlvv3Wz156D2MxmDuPRSUBF960FwJOWMbWe4VjQcQ8_oUdmMEDj7Z_76OkLoNdiUMB5GDgXDuhEemsHD3tR9-XM27RyiGEQ5LCvjDMcxci8Zee-g0ZzVGlpd6lFsdZotsB85UH6NokyXqqahvXx0XIyV4dstPRmtoAnj--d48HjXwsQw4Pqma3b73_Z0zg"/>
+<div class="relative z-10">
+<span class="font-label-sm tracking-widest uppercase opacity-80">分类</span>
+<h4 class="font-headline-lg mb-4">前沿科技</h4>
+<p class="font-body-md mb-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">洞察未来的边界，解码人工智能、量子计算与宇宙奥秘。</p>
+<a class="text-xs font-bold border-b border-white pb-1 w-fit" href="#">浏览系列</a>
+</div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-[5]"></div>
+</div>
+</div>
+</section>
+<!-- Newsletter Subscription -->
+<section class="max-w-container-max mx-auto px-16 py-[120px] bg-primary text-white text-center">
+<h3 class="font-headline-lg mb-6">订阅我们的馆藏期刊</h3>
+<p class="font-body-lg text-stone-400 mb-10 max-w-2xl mx-auto">每周为您递送精选书评、作者专访及限时珍藏版书籍发售预告。加入我们的阅读社群。</p>
+<form class="flex max-w-md mx-auto border-b border-stone-700 py-2">
+<input class="bg-transparent border-none focus:ring-0 flex-grow text-white placeholder-stone-600" placeholder="输入您的电子邮箱地址" type="email"/>
+<button class="text-secondary font-label-sm uppercase tracking-widest px-4" type="submit">立即订阅</button>
+</form>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full py-24 px-16 grid grid-cols-1 md:grid-cols-2 gap-8 items-end mt-[120px] bg-stone-50 dark:bg-stone-900 border-t border-stone-200 dark:border-stone-800 text-[#2C2420] dark:text-stone-200">
+<div class="space-y-6">
+<h2 class="font-serif text-lg italic text-[#2C2420] dark:text-stone-100">馆藏书屋</h2>
+<p class="font-['Manrope'] text-xs tracking-wider font-light leading-loose max-w-sm">
+                作为全球知名的数字化私人馆藏，我们致力于将纸质阅读的庄重感带入数字时代，为每一位追求深度阅读的灵魂寻找最佳的归宿。
+            </p>
+<div class="flex gap-8">
+<a class="font-['Manrope'] text-xs tracking-wider font-light leading-loose text-stone-500 dark:text-stone-400 hover:text-[#2C2420] dark:hover:text-white transition-colors duration-300" href="#">隐私政策</a>
+<a class="font-['Manrope'] text-xs tracking-wider font-light leading-loose text-stone-500 dark:text-stone-400 hover:text-[#2C2420] dark:hover:text-white transition-colors duration-300" href="#">配送与退货</a>
+<a class="font-['Manrope'] text-xs tracking-wider font-light leading-loose text-stone-500 dark:text-stone-400 hover:text-[#2C2420] dark:hover:text-white transition-colors duration-300" href="#">机构销售</a>
+<a class="font-['Manrope'] text-xs tracking-wider font-light leading-loose text-stone-500 dark:text-stone-400 hover:text-[#2C2420] dark:hover:text-white transition-colors duration-300" href="#">联系我们</a>
+</div>
+</div>
+<div class="flex flex-col items-end gap-4">
+<div class="flex gap-4 mb-4">
+<span class="material-symbols-outlined text-stone-400 cursor-pointer hover:text-primary">social_leaderboard</span>
+<span class="material-symbols-outlined text-stone-400 cursor-pointer hover:text-primary">language</span>
+<span class="material-symbols-outlined text-stone-400 cursor-pointer hover:text-primary">share</span>
+</div>
+<p class="font-['Manrope'] text-xs tracking-wider font-light leading-loose text-stone-400 uppercase">
+                © 2024 馆藏书屋. 为有品位的读者精心打造。
+            </p>
+</div>
+</footer>
+</body></html>

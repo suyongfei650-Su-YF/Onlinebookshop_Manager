@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bookshop.admin.mapper.BookFavoriteMapper">
+
+  <select id="selectByCustomerId" resultType="com.bookshop.admin.dto.FavoriteBookRow">
+    SELECT
+      f.id AS favoriteId,
+      f.created_at AS favoritedAt,
+      b.id,
+      b.category_id AS categoryId,
+      c.name AS categoryName,
+      b.title,
+      b.author,
+      b.isbn,
+      b.price,
+      b.stock,
+      b.status,
+      b.cover_url AS coverUrl,
+      b.description
+    FROM book_favorite f
+    INNER JOIN book b ON b.id = f.book_id
+    LEFT JOIN category c ON c.id = b.category_id
+    WHERE f.customer_id = #{customerId}
+    ORDER BY f.created_at DESC
+  </select>
+
+  <select id="countByCustomerAndBook" resultType="long">
+    SELECT COUNT(*)
+    FROM book_favorite
+    WHERE customer_id = #{customerId} AND book_id = #{bookId}
+  </select>
+</mapper>
