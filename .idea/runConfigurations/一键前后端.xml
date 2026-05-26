@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="一键前后端" type="CompoundRunConfigurationType" factoryName="Compound Run Configuration">
-    <toRun name="后端 Spring Boot" type="MavenRunConfiguration" />
+  <configuration default="false" name="一键前后端" type="CompoundRunConfigurationType">
+    <toRun name="启动后端 SpringBoot" type="SpringBootApplicationConfigurationType" />
     <toRun name="前端 manager-ui dev" type="js.build_tools.npm" />
     <method v="2" />
   </configuration>

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bookshop.admin.mapper.GuestbookMessageMapper">
+
+  <sql id="visibleWhere">
+    m.status = 'VISIBLE'
+  </sql>
+
+  <sql id="messageColumns">
+    m.id,
+    m.customer_id AS customerId,
+    m.content,
+    m.status,
+    m.admin_reply AS adminReply,
+    m.admin_reply_at AS adminReplyAt,
+    m.created_at AS createdAt,
+    COALESCE(NULLIF(TRIM(c.nickname), ''), c.username, '读者') AS nickname,
+    c.avatar_url AS avatarUrl
+  </sql>
+
+  <sql id="replierColumn">
+    COALESCE(NULLIF(TRIM(a.display_name), ''), a.username, '管理员') AS replierName
+  </sql>
+
+  <select id="selectVisiblePage" resultType="com.bookshop.admin.dto.GuestbookMessageRow">
+    SELECT
+      <include refid="messageColumns"/>,
+      <include refid="replierColumn"/>
+    FROM guestbook_message m
+    INNER JOIN customer c ON c.id = m.customer_id
+    LEFT JOIN admin_user a ON a.id = m.admin_replier_id
+    WHERE <include refid="visibleWhere"/>
+    ORDER BY m.created_at DESC
+    LIMIT #{limit} OFFSET #{offset}
+  </select>
+
+  <select id="countVisible" resultType="long">
+    SELECT COUNT(*)
+    FROM guestbook_message m
+    WHERE <include refid="visibleWhere"/>
+  </select>
+
+  <select id="selectVisibleById" resultType="com.bookshop.admin.dto.GuestbookMessageRow">
+    SELECT
+      <include refid="messageColumns"/>,
+      <include refid="replierColumn"/>
+    FROM guestbook_message m
+    INNER JOIN customer c ON c.id = m.customer_id
+    LEFT JOIN admin_user a ON a.id = m.admin_replier_id
+    WHERE m.id = #{id} AND <include refid="visibleWhere"/>
+  </select>
+
+  <select id="selectAdminPage" resultType="com.bookshop.admin.dto.GuestbookMessageRow">
+    SELECT
+      <include refid="messageColumns"/>,
+      <include refid="replierColumn"/>
+    FROM guestbook_message m
+    INNER JOIN customer c ON c.id = m.customer_id
+    LEFT JOIN admin_user a ON a.id = m.admin_replier_id
+  <where>
+    <if test="keyword != null and keyword != ''">
+      AND (
+        m.content LIKE CONCAT('%', #{keyword}, '%')
+        OR c.nickname LIKE CONCAT('%', #{keyword}, '%')
+        OR c.username LIKE CONCAT('%', #{keyword}, '%')
+        OR m.admin_reply LIKE CONCAT('%', #{keyword}, '%')
+      )
+    </if>
+    <if test="replyFilter == 'pending'">
+      AND (m.admin_reply IS NULL OR TRIM(m.admin_reply) = '')
+    </if>
+    <if test="replyFilter == 'replied'">
+      AND m.admin_reply IS NOT NULL AND TRIM(m.admin_reply) != ''
+    </if>
+  </where>
+    ORDER BY m.created_at DESC
+    LIMIT #{limit} OFFSET #{offset}
+  </select>
+
+  <select id="countAdmin" resultType="long">
+    SELECT COUNT(*)
+    FROM guestbook_message m
+    INNER JOIN customer c ON c.id = m.customer_id
+  <where>
+    <if test="keyword != null and keyword != ''">
+      AND (
+        m.content LIKE CONCAT('%', #{keyword}, '%')
+        OR c.nickname LIKE CONCAT('%', #{keyword}, '%')
+        OR c.username LIKE CONCAT('%', #{keyword}, '%')
+        OR m.admin_reply LIKE CONCAT('%', #{keyword}, '%')
+      )
+    </if>
+    <if test="replyFilter == 'pending'">
+      AND (m.admin_reply IS NULL OR TRIM(m.admin_reply) = '')
+    </if>
+    <if test="replyFilter == 'replied'">
+      AND m.admin_reply IS NOT NULL AND TRIM(m.admin_reply) != ''
+    </if>
+  </where>
+  </select>
+
+  <select id="countAdminPending" resultType="long">
+    SELECT COUNT(*)
+    FROM guestbook_message m
+    WHERE m.admin_reply IS NULL OR TRIM(m.admin_reply) = ''
+  </select>
+
+  <select id="selectAdminById" resultType="com.bookshop.admin.dto.GuestbookMessageRow">
+    SELECT
+      <include refid="messageColumns"/>,
+      <include refid="replierColumn"/>
+    FROM guestbook_message m
+    INNER JOIN customer c ON c.id = m.customer_id
+    LEFT JOIN admin_user a ON a.id = m.admin_replier_id
+    WHERE m.id = #{id}
+  </select>
+</mapper>

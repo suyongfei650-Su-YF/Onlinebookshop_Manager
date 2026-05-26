@@ -8,6 +8,7 @@ public class DashboardTopBookRow {
     private String author;
     private String coverUrl;
     private String categoryName;
+    private String isbn;
     private BigDecimal price;
     private Integer stock;
     private String status;
@@ -51,6 +52,14 @@ public class DashboardTopBookRow {
 
     public void setCategoryName(String categoryName) {
         this.categoryName = categoryName;
+    }
+
+    public String getIsbn() {
+        return isbn;
+    }
+
+    public void setIsbn(String isbn) {
+        this.isbn = isbn;
     }
 
     public BigDecimal getPrice() {

@@ -13,6 +13,7 @@ export type DashboardTopBook = {
   author?: string | null
   coverUrl?: string | null
   categoryName?: string | null
+  isbn?: string | null
   price: number
   stock: number
   status: string

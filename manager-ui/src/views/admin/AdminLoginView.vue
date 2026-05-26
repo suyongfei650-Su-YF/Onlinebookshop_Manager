@@ -40,24 +40,26 @@ async function onSubmit() {
     return
   }
   loading.value = true
-  try {
-    const res = await adminLogin({
-      username: username.value,
-      password: password.value,
-      captcha: captcha.value.trim(),
-      rememberMe: rememberMe.value,
-    })
-    if (res.success) await router.push('/admin/dashboard')
-    else {
-      errorMsg.value = res.message || '登录失败'
-      refreshCaptcha()
-    }
-  } catch {
-    errorMsg.value = '无法连接服务器，请确认后端已启动且数据库已初始化'
-    refreshCaptcha()
-  } finally {
+  const res = await adminLogin({
+    username: username.value,
+    password: password.value,
+    captcha: captcha.value.trim(),
+    rememberMe: rememberMe.value,
+  })
+  if (!res.success) {
+    errorMsg.value = res.message || '登录失败'
+    await refreshCaptcha()
     loading.value = false
+    return
   }
+
+  // 整页跳转，避免 router.push 与路由守卫竞态导致“登录成功却无法进入后台”
+  sessionStorage.setItem('admin:just-logged-in', String(Date.now()))
+  const redirect = typeof router.currentRoute.value.query.redirect === 'string'
+    ? router.currentRoute.value.query.redirect
+    : '/admin/dashboard'
+  const target = redirect.startsWith('/admin') && !redirect.startsWith('/admin/login') ? redirect : '/admin/dashboard'
+  window.location.assign(target)
 }
 
 function openHelpDialog() {

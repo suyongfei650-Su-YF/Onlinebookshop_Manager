@@ -12,6 +12,7 @@
   </parent>
 
   <groupId>STT</groupId>
+
   <artifactId>Onlinebookshop_Manager</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>war</packaging>
@@ -76,8 +77,8 @@
             <configuration>
               <rules>
                 <requireJavaVersion>
-                  <version>[1.8,1.9)</version>
-                  <message>请使用 JDK 8 编译（Tomcat 为 Java 8）。用 JDK 11+ 会出现 class 55.0 错误。</message>
+                  <version>[1.8,)</version>
+                  <message>请使用 JDK 8 或更高版本运行 Maven；运行 Tomcat/Spring Boot 仍需 JRE 8。</message>
                 </requireJavaVersion>
               </rules>
             </configuration>
@@ -89,15 +90,13 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.11.0</version>
         <configuration>
-          <!-- class 52.0；fork=false 避免中文路径下 javac 找不到源文件 -->
+          <!-- 必须 class 52.0；fork=false 避免中文路径下 javac 找不到源文件 -->
           <source>${maven.compiler.source}</source>
           <target>${maven.compiler.target}</target>
           <encoding>UTF-8</encoding>
           <fork>false</fork>
+          <parameters>true</parameters>
           <showWarnings>true</showWarnings>
-          <compilerArgs>
-            <arg>-parameters</arg>
-          </compilerArgs>
         </configuration>
       </plugin>
       <plugin>
@@ -126,4 +125,28 @@
       </plugin>
     </plugins>
   </build>
+
+  <!-- 用 JDK 9+ 跑 Maven 时强制 release 8，避免 class 55.0 -->
+  <profiles>
+    <profile>
+      <id>bytecode-java8-on-jdk9plus</id>
+      <activation>
+        <jdk>[9,)</jdk>
+      </activation>
+      <properties>
+        <maven.compiler.release>8</maven.compiler.release>
+      </properties>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <configuration>
+              <release>8</release>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 </project>

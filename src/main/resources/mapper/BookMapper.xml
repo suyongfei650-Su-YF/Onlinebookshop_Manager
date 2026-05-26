@@ -137,4 +137,50 @@
     LEFT JOIN category c ON c.id = b.category_id
     WHERE b.id = #{id} AND b.status = 'ON_SHELF'
   </select>
+
+  <sql id="BookSalesJoin">
+    LEFT JOIN (
+      SELECT oi.book_id, COALESCE(SUM(oi.quantity), 0) AS sold_qty
+      FROM order_item oi
+      INNER JOIN shop_order o ON o.id = oi.order_id
+      WHERE o.status NOT IN ('CANCELLED', 'PENDING_PAY')
+      GROUP BY oi.book_id
+    ) sales ON sales.book_id = b.id
+  </sql>
+
+  <select id="selectStockAlertBooks" resultType="com.bookshop.admin.dto.DashboardTopBookRow">
+    SELECT
+      b.id AS bookId,
+      b.title,
+      b.author,
+      b.cover_url AS coverUrl,
+      c.name AS categoryName,
+      b.isbn,
+      b.price,
+      b.stock,
+      b.status,
+      COALESCE(sales.sold_qty, 0) AS soldQty
+    FROM book b
+    LEFT JOIN category c ON c.id = b.category_id
+    <include refid="BookSalesJoin"/>
+    WHERE b.status = 'ON_SHELF'
+    <choose>
+      <when test="mode == 'OUT'">
+        AND b.stock &lt;= 0
+      </when>
+      <when test="mode == 'LOW'">
+        AND b.stock &gt; 0 AND b.stock &lt; #{threshold}
+      </when>
+      <when test="mode == 'REDUCE'">
+        AND b.stock &gt;= #{reduceMinStock}
+        AND COALESCE(sales.sold_qty, 0) &lt;= #{reduceMaxSold}
+      </when>
+    </choose>
+    ORDER BY
+    <choose>
+      <when test="mode == 'REDUCE'">b.stock DESC, soldQty ASC</when>
+      <otherwise>b.stock ASC, soldQty DESC</otherwise>
+    </choose>
+    LIMIT #{limit}
+  </select>
 </mapper>

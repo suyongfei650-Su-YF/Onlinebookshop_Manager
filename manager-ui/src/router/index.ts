@@ -38,6 +38,7 @@ const router = createRouter({
     { path: '/portal/profile', name: 'portal-profile', component: () => import('../views/user/UserProfileView.vue') },
     { path: '/portal/orders', name: 'portal-orders', component: () => import('../views/user/UserOrdersView.vue') },
     { path: '/portal/favorites', name: 'portal-favorites', component: () => import('../views/user/UserFavoritesView.vue') },
+    { path: '/portal/guestbook', name: 'portal-guestbook', component: () => import('../views/portal/PortalGuestbookView.vue') },
     // 兼容旧的 /user/* 路径（重定向到门户端）
     { path: '/user/cart', redirect: '/portal/cart' },
     { path: '/user/checkout', redirect: '/portal/checkout' },
@@ -94,11 +95,36 @@ const router = createRouter({
       name: 'admin-categories',
       component: () => import('../views/admin/AdminCategoriesView.vue'),
     },
+    {
+      path: '/admin/book-alerts',
+      name: 'admin-book-alerts',
+      component: () => import('../views/admin/AdminBookAlertView.vue'),
+    },
+    {
+      path: '/admin/guestbook',
+      name: 'admin-guestbook',
+      component: () => import('../views/admin/AdminGuestbookView.vue'),
+    },
+    {
+      path: '/:pathMatch(.*)*',
+      name: 'not-found',
+      redirect: '/portal',
+    },
   ],
 })
 
 router.beforeEach(async (to, _from, next) => {
   if (USER_PROTECTED_PATHS.has(to.path)) {
+    const userJustLoggedIn = sessionStorage.getItem('user:just-logged-in')
+    if (userJustLoggedIn) {
+      const ts = Number(userJustLoggedIn)
+      if (!Number.isNaN(ts) && Date.now() - ts < 15_000) {
+        sessionStorage.removeItem('user:just-logged-in')
+        next()
+        return
+      }
+      sessionStorage.removeItem('user:just-logged-in')
+    }
     try {
       const r = await userMe()
       if (r.success && r.data) {
@@ -132,6 +158,16 @@ router.beforeEach(async (to, _from, next) => {
     }
     next()
     return
+  }
+  const justLoggedIn = sessionStorage.getItem('admin:just-logged-in')
+  if (justLoggedIn) {
+    const ts = Number(justLoggedIn)
+    if (!Number.isNaN(ts) && Date.now() - ts < 15_000) {
+      sessionStorage.removeItem('admin:just-logged-in')
+      next()
+      return
+    }
+    sessionStorage.removeItem('admin:just-logged-in')
   }
   try {
     const r = await adminSession()

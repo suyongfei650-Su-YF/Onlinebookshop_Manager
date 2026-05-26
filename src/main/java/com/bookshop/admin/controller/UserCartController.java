@@ -7,6 +7,7 @@ import com.bookshop.admin.entity.Book;
 import com.bookshop.admin.entity.CartItem;
 import com.bookshop.admin.mapper.BookMapper;
 import com.bookshop.admin.mapper.CartItemMapper;
+import com.bookshop.admin.service.UserCartService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
@@ -33,10 +34,12 @@ public class UserCartController {
 
     private final CartItemMapper cartItemMapper;
     private final BookMapper bookMapper;
+    private final UserCartService userCartService;
 
-    public UserCartController(CartItemMapper cartItemMapper, BookMapper bookMapper) {
+    public UserCartController(CartItemMapper cartItemMapper, BookMapper bookMapper, UserCartService userCartService) {
         this.cartItemMapper = cartItemMapper;
         this.bookMapper = bookMapper;
+        this.userCartService = userCartService;
     }
 
     private static Long getUserId(HttpSession session) {
@@ -113,42 +116,15 @@ public class UserCartController {
             }
             int addQty = parseQuantity(body, 1);
 
-            Book book = bookMapper.selectById(bookId);
-            if (book == null) {
-                return ApiResult.fail("图书不存在");
-            }
-            if (!"ON_SHELF".equalsIgnoreCase(book.getStatus())) {
-                return ApiResult.fail("该图书已下架，无法加入购物车");
-            }
-            if (book.getStock() == null || book.getStock() <= 0) {
-                return ApiResult.fail("该图书暂时缺货");
-            }
-
-            CartItem existing = cartItemMapper.selectOne(
-                    new LambdaQueryWrapper<CartItem>()
-                            .eq(CartItem::getCustomerId, userId)
-                            .eq(CartItem::getBookId, bookId));
-            int finalQty;
-            if (existing != null) {
-                finalQty = Math.min(book.getStock(), existing.getQuantity() + addQty);
-                existing.setQuantity(finalQty);
-                existing.setUpdatedAt(LocalDateTime.now());
-                cartItemMapper.updateById(existing);
-            } else {
-                finalQty = Math.min(book.getStock(), addQty);
-                CartItem row = new CartItem();
-                row.setCustomerId(userId);
-                row.setBookId(bookId);
-                row.setQuantity(finalQty);
-                row.setCreatedAt(LocalDateTime.now());
-                row.setUpdatedAt(LocalDateTime.now());
-                cartItemMapper.insert(row);
+            UserCartService.AddResult addResult = userCartService.addItem(userId, bookId, addQty);
+            if (!addResult.isSuccess()) {
+                return ApiResult.fail(addResult.getMessage());
             }
 
             Map<String, Object> data = new LinkedHashMap<>();
-            data.put("message", "已加入购物车");
-            data.put("quantity", finalQty);
-            data.put("cartCount", countCartItems(userId));
+            data.put("message", addResult.getMessage());
+            data.put("quantity", addResult.getQuantity());
+            data.put("cartCount", addResult.getCartCount());
             return ApiResult.ok(data);
         } catch (DataAccessException e) {
             log.error("add cart failed", e);
@@ -191,7 +167,7 @@ public class UserCartController {
                 cartItemMapper.deleteById(item.getId());
                 Map<String, Object> data = new LinkedHashMap<>();
                 data.put("message", "已移除");
-                data.put("cartCount", countCartItems(userId));
+                data.put("cartCount", userCartService.countItems(userId));
                 return ApiResult.ok(data);
             }
 
@@ -226,7 +202,7 @@ public class UserCartController {
                             .eq(CartItem::getBookId, bookId));
             Map<String, Object> data = new LinkedHashMap<>();
             data.put("message", "已从购物车移除");
-            data.put("cartCount", countCartItems(userId));
+            data.put("cartCount", userCartService.countItems(userId));
             return ApiResult.ok(data);
         } catch (DataAccessException e) {
             log.error("remove cart failed", e);
@@ -237,8 +213,4 @@ public class UserCartController {
         }
     }
 
-    private long countCartItems(Long userId) {
-        Long count = cartItemMapper.selectCount(new LambdaQueryWrapper<CartItem>().eq(CartItem::getCustomerId, userId));
-        return count != null ? count : 0;
-    }
 }

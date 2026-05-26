@@ -4,3 +4,22 @@ spring:
     url: jdbc:mysql://127.0.0.1:3306/bookshop_admin?useSSL=false&serverTimezone=Asia/Shanghai&characterEncoding=utf8&allowPublicKeyRetrieval=true
     username: root
     password: sufei520
+
+# 门户 AI 助手 — 对接 Ollama（本地开源模型）示例：
+# 1. 安装 Ollama 后执行: ollama pull llama3.2
+# 2. 取消下面 enabled 注释并重启 Spring Boot
+# app:
+#   ai:
+#     enabled: true
+#     base-url: http://127.0.0.1:11434/v1
+#     api-key:
+#     model: llama3.2
+
+# DeepSeek 等云端 OpenAI 兼容 API 示例：
+# app:
+#   ai:
+#     enabled: true
+#     base-url: https://api.deepseek.com/v1
+#     api-key: sk-your-key
+#     model: deepseek-chat
+

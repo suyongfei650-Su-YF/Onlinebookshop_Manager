@@ -124,7 +124,6 @@
           <p v-if="errorMsg" class="mb-4 rounded-lg bg-error-container px-3 py-2 text-sm text-on-error-container">
             {{ errorMsg }}
           </p>
-
           <form class="space-y-stack-lg" @submit.prevent="onSubmit">
             <label class="block">
               <span class="font-label-sm text-on-surface-variant">账号 / 邮箱 / 手机号</span>
@@ -236,12 +235,11 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
-import { RouterLink, useRoute, useRouter } from 'vue-router'
-import { fetchAdminCaptchaObjectUrl } from '../../api/admin/http'
+import { RouterLink, useRoute } from 'vue-router'
+import { fetchUserCaptchaObjectUrl } from '../../api/user/http'
 import { userLogin, userRegister } from '../../api/user/auth'
 import { notifyUserAuthChanged } from '../../utils/userSession'
 
-const router = useRouter()
 const route = useRoute()
 
 const isLogin = ref(true)
@@ -286,7 +284,7 @@ function closeNoticeDialog() {
 async function refreshCaptcha() {
   errorMsg.value = ''
   try {
-    const { objectUrl } = await fetchAdminCaptchaObjectUrl()
+    const { objectUrl } = await fetchUserCaptchaObjectUrl()
     if (prevObjectUrl.startsWith('blob:')) URL.revokeObjectURL(prevObjectUrl)
     prevObjectUrl = objectUrl
     captchaSrc.value = objectUrl
@@ -331,9 +329,14 @@ async function onSubmit() {
   loading.value = true
   try {
     if (isLogin.value) {
-      const r = await userLogin({ account: account.value.trim(), password: password.value, captcha: captcha.value.trim() })
+      const r = await userLogin({
+        account: account.value.trim(),
+        password: password.value,
+        captcha: captcha.value.trim(),
+      })
       if (!r.success) {
         errorMsg.value = r.message || '登录失败'
+        await refreshCaptcha()
         return
       }
     } else {
@@ -345,16 +348,21 @@ async function onSubmit() {
       })
       if (!r.success) {
         errorMsg.value = r.message || '注册失败'
+        await refreshCaptcha()
         return
       }
       isLogin.value = true
     }
     notifyUserAuthChanged(true)
+    sessionStorage.setItem('user:just-logged-in', String(Date.now()))
     const redirect = typeof route.query.redirect === 'string' ? route.query.redirect : ''
-    await router.push(redirect.startsWith('/portal') ? redirect : '/portal/profile')
+    const target = redirect.startsWith('/portal') ? redirect : '/portal/profile'
+    window.location.assign(target)
+  } catch (e) {
+    errorMsg.value = e instanceof Error ? e.message : '网络异常，请稍后重试'
+    await refreshCaptcha()
   } finally {
     loading.value = false
-    refreshCaptcha()
   }
 }
 

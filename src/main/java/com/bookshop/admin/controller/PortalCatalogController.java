@@ -1,10 +1,12 @@
 package com.bookshop.admin.controller;
 
 import com.bookshop.admin.common.ApiResult;
+import com.bookshop.admin.dto.GuestbookMessageRow;
 import com.bookshop.admin.dto.PortalBookDetail;
 import com.bookshop.admin.dto.PortalCategoryRow;
 import com.bookshop.admin.entity.Book;
 import com.bookshop.admin.mapper.BookMapper;
+import com.bookshop.admin.mapper.GuestbookMessageMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
@@ -28,10 +32,15 @@ public class PortalCatalogController {
     private static final Set<String> SORT_WHITELIST = Collections.unmodifiableSet(
             new HashSet<>(Arrays.asList("default", "price_asc", "price_desc", "title")));
 
-    private final BookMapper bookMapper;
+    private static final int GUESTBOOK_DEFAULT_SIZE = 20;
+    private static final int GUESTBOOK_MAX_SIZE = 50;
 
-    public PortalCatalogController(BookMapper bookMapper) {
+    private final BookMapper bookMapper;
+    private final GuestbookMessageMapper guestbookMessageMapper;
+
+    public PortalCatalogController(BookMapper bookMapper, GuestbookMessageMapper guestbookMessageMapper) {
         this.bookMapper = bookMapper;
+        this.guestbookMessageMapper = guestbookMessageMapper;
     }
 
     @GetMapping("/categories")
@@ -71,6 +80,41 @@ public class PortalCatalogController {
         }
     }
 
+    @GetMapping("/guestbook/messages")
+    public ResponseEntity<ApiResult<Map<String, Object>>> guestbookMessages(
+            @RequestParam(required = false, defaultValue = "1") int page,
+            @RequestParam(required = false, defaultValue = "20") int size,
+            HttpSession session) {
+        try {
+            int p = Math.max(1, page);
+            int s = Math.min(GUESTBOOK_MAX_SIZE, Math.max(1, size <= 0 ? GUESTBOOK_DEFAULT_SIZE : size));
+            int offset = (p - 1) * s;
+
+            Long userId = sessionUserId(session);
+            List<GuestbookMessageRow> rows = guestbookMessageMapper.selectVisiblePage(offset, s);
+            if (rows == null) {
+                rows = new ArrayList<>();
+            }
+            if (userId != null) {
+                for (GuestbookMessageRow row : rows) {
+                    if (row != null && row.getCustomerId() != null) {
+                        row.setMine(userId.equals(row.getCustomerId()));
+                    }
+                }
+            }
+
+            Map<String, Object> data = new LinkedHashMap<>();
+            data.put("list", rows);
+            data.put("total", guestbookMessageMapper.countVisible());
+            data.put("page", p);
+            data.put("size", s);
+            data.put("loggedIn", userId != null);
+            return ResponseEntity.ok(ApiResult.ok(data));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(ApiResult.fail("加载留言失败，请稍后重试"));
+        }
+    }
+
     @GetMapping("/books/{id}")
     public ResponseEntity<ApiResult<PortalBookDetail>> bookDetail(@PathVariable Long id) {
         try {
@@ -82,5 +126,13 @@ public class PortalCatalogController {
         } catch (Exception e) {
             return ResponseEntity.status(500).body(ApiResult.fail(e.getMessage()));
         }
+    }
+
+    private static Long sessionUserId(HttpSession session) {
+        Object idObj = session == null ? null : session.getAttribute("USER_ID");
+        if (!(idObj instanceof Number)) {
+            return null;
+        }
+        return ((Number) idObj).longValue();
     }
 }

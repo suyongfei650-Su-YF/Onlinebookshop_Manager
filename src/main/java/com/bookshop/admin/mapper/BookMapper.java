@@ -33,4 +33,11 @@ public interface BookMapper extends BaseMapper<Book> {
     List<PortalCategoryRow> selectPortalCategoryStats();
 
     PortalBookDetail selectPortalBookDetail(@Param("id") Long id);
+
+    List<com.bookshop.admin.dto.DashboardTopBookRow> selectStockAlertBooks(
+            @Param("mode") String mode,
+            @Param("threshold") int threshold,
+            @Param("reduceMinStock") int reduceMinStock,
+            @Param("reduceMaxSold") int reduceMaxSold,
+            @Param("limit") int limit);
 }
