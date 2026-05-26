@@ -1,0 +1,17 @@
+# Netlify 仅托管前端静态页（manager-ui），Spring Boot 需另部署到云服务器
+# 文档：https://docs.netlify.com/configure-builds/file-based-configuration/
+
+[build]
+  base = "manager-ui"
+  # 跳过 vue-tsc（本地 npm run build 会因 TS 报错失败，导致 Netlify 无 dist → 整站 404）
+  command = "npm ci && npx vite build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# Vue Router history 模式：子路径刷新/直达不再 404
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
