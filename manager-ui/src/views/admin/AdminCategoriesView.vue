@@ -239,6 +239,10 @@ onMounted(() => void loadCategories())
           <span class="material-symbols-outlined">dashboard</span>
           仪表盘
         </RouterLink>
+        <RouterLink to="/admin/book-alerts" :class="nc('/admin/book-alerts')">
+          <span class="material-symbols-outlined">inventory_2</span>
+          图书预警
+        </RouterLink>
         <RouterLink to="/admin/books" :class="nc('/admin/books')">
           <span class="material-symbols-outlined">menu_book</span>
           图书管理
@@ -254,6 +258,10 @@ onMounted(() => void loadCategories())
         <RouterLink to="/admin/categories" :class="nc('/admin/categories')">
           <span class="material-symbols-outlined">category</span>
           分类管理
+        </RouterLink>
+        <RouterLink to="/admin/guestbook" :class="nc('/admin/guestbook')">
+          <span class="material-symbols-outlined">forum</span>
+          留言管理
         </RouterLink>
       </nav>
       <div class="border-t border-stone-800 p-4">

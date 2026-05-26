@@ -19,8 +19,8 @@ public class UserCaptchaController {
     @GetMapping("/captcha")
     public ResponseEntity<byte[]> captcha(HttpSession session) throws Exception {
         String code = CaptchaUtil.randomCode();
-        session.setAttribute(CaptchaValidator.SESSION_CODE, code.toLowerCase());
-        session.setAttribute(CaptchaValidator.SESSION_TIME, System.currentTimeMillis());
+        session.setAttribute(CaptchaValidator.USER_SESSION_CODE, code.toLowerCase());
+        session.setAttribute(CaptchaValidator.USER_SESSION_TIME, System.currentTimeMillis());
         byte[] svg = CaptchaUtil.svgBytes(code);
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType("image/svg+xml"))

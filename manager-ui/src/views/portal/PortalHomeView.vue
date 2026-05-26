@@ -1,5 +1,13 @@
 <template>
   <div class="bg-surface-bright text-on-surface font-body-md">
+    <p
+      v-if="portalApiError"
+      class="fixed left-0 right-0 top-20 z-50 mx-auto max-w-3xl rounded-lg bg-error-container px-4 py-2 text-center text-sm shadow"
+      role="alert"
+    >
+      {{ portalApiError }}
+      <span class="mt-1 block text-xs opacity-80">HTTP 502 = 8080 后端未启动。IDEA 运行「启动后端 SpringBoot」或 Tomcat，再访问 http://127.0.0.1:5173</span>
+    </p>
     <main class="pt-20">
       <section
         class="portal-hero relative -mt-20 flex h-screen w-full flex-col justify-end overflow-hidden bg-primary pt-20"
@@ -180,7 +188,7 @@
           >
             <img
               class="absolute inset-0 z-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
-              :src="cat.cover"
+              :src="categoryCoverSrc(cat.cover)"
               :alt="cat.title"
             />
             <div class="relative z-10">
@@ -345,6 +353,7 @@ const categories = ref<PortalCategory[]>([])
 const newArrivalsLoading = ref(true)
 const hotRankBooks = ref<PortalBook[]>([])
 const hotRankLoading = ref(true)
+const portalApiError = ref('')
 
 const categoryMap = computed(() => new Map(categories.value.map((c) => [c.id, c])))
 const featuredNewBook = computed(() => newArrivalBooks.value[0] ?? null)
@@ -364,6 +373,10 @@ function rankLabel(index: number) {
   return String(index + 1).padStart(2, '0')
 }
 
+function setPortalApiError(msg: string) {
+  if (msg) portalApiError.value = msg
+}
+
 async function loadNewArrivals() {
   newArrivalsLoading.value = true
   try {
@@ -372,7 +385,9 @@ async function loadNewArrivals() {
       portalBooksList({ page: 1, size: 3, sort: 'default' }),
     ])
     if (catRes.success && catRes.data) categories.value = catRes.data
+    else if (!catRes.success) setPortalApiError(catRes.message || '分类加载失败')
     if (bookRes.success && bookRes.data?.list) newArrivalBooks.value = bookRes.data.list
+    else if (!bookRes.success) setPortalApiError(bookRes.message || '图书列表加载失败')
   } finally {
     newArrivalsLoading.value = false
   }
@@ -383,6 +398,7 @@ async function loadHotRanking() {
   try {
     const res = await portalBooksList({ page: 1, size: 5, sort: 'price_desc' })
     if (res.success && res.data?.list) hotRankBooks.value = res.data.list
+    else if (!res.success) setPortalApiError(res.message || '热销榜加载失败')
   } finally {
     hotRankLoading.value = false
   }
@@ -408,22 +424,19 @@ const homeFeatureCategories = [
   {
     title: '艺术与设计',
     categoryId: 2,
-    cover:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuA7rk5Yng7YH4ZPh5tqmNCthUr62nNuebHrcODxDkTJTNa8nSK7B1mchFOOZgPf0FwQZ-qwKRtlWcoir2Jue5b1KkKL5mVrHEznNJd_x7PcEGow7ppo4KqUCCaoih70Bc4OkcB4pXVfhbSJFhVAAARQceuTo__AdhQWn2uFF-q0rhsU6sstLXos59UtelDYCDIV3j5CJHFueEFN5xZCgfcWYKpUGLHXeCoZ6ObF5pPx1WEhHcNH8Lcq1mF48cZ0OgeARHTL8ZyoDQ',
+    cover: '/categories/art-design.png',
     desc: '探索形式、色彩与灵魂的交织，收录全球顶尖艺评、设计理论与视觉艺术典藏。',
   },
   {
     title: '经典文学',
     categoryId: 2,
-    cover:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuCrsNzK3o9d2zZyf7BzgGGKcltpM6qo85Baz2kP7jlrc--9G14HTvwA31nduvBNiApL0cvIU0l6nYLRCwbJfrSehYmMRPsPygYljJzzvlhuvb-PNvR23FdmBNDZrKM_fX4Vsezd60i0KbNs_SoIKV623dyTELwPh6vj1hE-tN5fmrVvPDk_5wARBWrOfDAVQdJBjI5v8s2ZWfbzMWk35qbar97zNZn9H1sti44qsHV60b1qhlwZ2n73ELyMganxT6U6_ETiXeo_Bw',
+    cover: '/categories/classic-literature.png',
     desc: '重温中外名著与当代文学经典，在叙事与诗性中体味人性、时代与思想的光芒。',
   },
   {
     title: '前沿科技',
     categoryId: 7,
-    cover:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuBn-ljaO5Aoymc_ZOXEuRAQaSxWu5nQo7_bk2yzHxgPtBBRg-2SwZyZ3v_t5otLPB85dsnVwylgdNm6Dlvv3Wz156D2MxmDuPRSUBF960FwJOWMbWe4VjQcQ8_oUdmMEDj7Z_76OkLoNdiUMB5GDgXDuhEemsHD3tR9-XM27RyiGEQ5LCvjDMcxci8Zee-g0ZzVGlpd6lFsdZotsB85UH6NokyXqqahvXx0XIyV4dstPRmtoAnj--d48HjXwsQw4Pqma3b73_Z0zg',
+    cover: '/categories/frontier-science.png',
     desc: '聚焦科学发现、技术革新与未来趋势，用通俗读本读懂正在改变世界的知识前沿。',
   },
 ]
@@ -471,6 +484,15 @@ function heroImageSrc(cover: string) {
     return `${base}${cover}`
   }
   return resolveBookCover(cover)
+}
+
+function categoryCoverSrc(cover: string) {
+  if (cover.startsWith('http://') || cover.startsWith('https://')) return cover
+  if (cover.startsWith('/categories/')) {
+    const base = (import.meta.env.BASE_URL || '/').replace(/\/$/, '')
+    return `${base}${cover}`
+  }
+  return cover
 }
 
 function onHeroCoverError(index: number) {

@@ -5,7 +5,8 @@ cd /d "%~dp0.."
 
 set "TOMCAT_WEBAPPS=D:\apache-tomcat-9.0.93-windows-x64\apache-tomcat-9.0.93\webapps"
 set "WAR_SRC=%CD%\target\Onlinebookshop_Manager.war"
-set "APP_NAME=Onlinebookshop_Manager_war"
+rem 与 IDEA / Vite 一致；若需保留旧目录名可改为 Onlinebookshop_Manager_war
+set "APP_NAME=Onlinebookshop_Manager"
 
 if not exist "%WAR_SRC%" (
   echo [错误] 找不到 %WAR_SRC%

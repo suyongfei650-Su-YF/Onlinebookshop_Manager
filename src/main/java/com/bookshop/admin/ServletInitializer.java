@@ -8,6 +8,7 @@ public class ServletInitializer extends SpringBootServletInitializer {
 
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
-        return builder.sources(BookshopAdminApplication.class);
+        // 外置 Tomcat 必须用 prod：context-path 为 /，由 Tomcat Application context 提供 /Onlinebookshop_Manager
+        return builder.sources(BookshopAdminApplication.class).profiles("prod");
     }
 }

@@ -25,6 +25,16 @@ app:
     allow-register: true
   # 图书封面上传目录（留空则自动：开发用 src/main/webapp/book-covers，否则 Tomcat 展开目录或用户目录）
   book-covers-dir:
+  # 门户 AI 阅读助手（OpenAI 兼容接口，如 Ollama: http://127.0.0.1:11434/v1）
+  ai:
+    enabled: false
+    base-url: ${AI_BASE_URL:http://127.0.0.1:11434/v1}
+    api-key: ${AI_API_KEY:}
+    model: ${AI_MODEL:llama3.2}
+    connect-timeout-ms: 15000
+    read-timeout-ms: 90000
+    max-tokens: 1200
+    temperature: 0.6
 
 mybatis-plus:
   mapper-locations: classpath:/mapper/**/*.xml
@@ -43,6 +53,10 @@ spring:
 server:
   servlet:
     context-path: /Onlinebookshop_Manager
+    session:
+      cookie:
+        # Vite 走 /api 代理时，浏览器路径是 /api；默认 Cookie Path 为 context-path 会导致登录带不上 Session
+        path: /
 
 ---
 # 外置 Tomcat：由 Tomcat 的 Application context 提供前缀，此处不再加一层
@@ -53,3 +67,6 @@ spring:
 server:
   servlet:
     context-path: /
+    session:
+      cookie:
+        path: /

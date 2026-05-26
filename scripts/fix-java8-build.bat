@@ -30,11 +30,14 @@ if exist "target\Onlinebookshop_Manager" rmdir /s /q "target\Onlinebookshop_Mana
 echo [2/2] 使用 JDK 8 重新编译...
 where mvn >nul 2>&1
 if errorlevel 1 (
-  echo [提示] 未找到 mvn，请在 IDEA 中：
-  echo   - Project Structure - Project SDK = 1.8
-  echo   - Settings - Java Compiler - bytecode = 8
-  echo   - Build - Rebuild Project
-  echo 并确认不要用 JDK 11/17 做 Build。
+  echo [提示] 未找到 mvn，请在 IDEA 中操作：
+  echo   1. 手动删除整个 target 文件夹
+  echo   2. File - Project Structure - Project SDK = 1.8
+  echo   3. Settings - Build Tools - Maven - Runner - JRE = 1.8
+  echo   4. 右侧 Maven - Lifecycle - 双击 clean，再双击 compile
+  echo   5. 运行「启动后端 SpringBoot」（已配置启动前 clean compile）
+  echo.
+  echo   切勿单独点 Build Project（若 Project SDK 是 11 会再次生成 class 55.0）
   pause
   exit /b 0
 )

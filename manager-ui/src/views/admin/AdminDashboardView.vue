@@ -8,6 +8,8 @@ import AdminProfileDialog from './components/AdminProfileDialog.vue'
 import { useAdminNav } from './composables/useAdminNav'
 import { useAdminLogout } from './composables/useAdminLogout'
 import { useAdminProfile } from './composables/useAdminProfile'
+import { exportDashboardExcel } from '../../utils/adminExport'
+import { adminBookAlertsReport } from '../../api/admin/bookAlerts'
 
 const router = useRouter()
 const { nc } = useAdminNav()
@@ -16,6 +18,8 @@ const showProfileDialog = ref(false)
 const { displayName, roleName, avatarUrl, updateProfile, changePassword } = useAdminProfile()
 
 const loading = ref(false)
+const exporting = ref(false)
+const exportToast = ref('')
 const errorMsg = ref('')
 const stats = ref<DashboardStats | null>(null)
 const globalSearch = ref('')
@@ -92,7 +96,7 @@ function goPendingPay() {
 }
 
 function goLowStock() {
-  router.push('/admin/books')
+  router.push('/admin/book-alerts')
 }
 
 function goUserSearch() {
@@ -112,7 +116,10 @@ async function loadDashboard() {
     const res = await adminDashboardStats()
     if (res.success && res.data) stats.value = res.data
     else {
-      errorMsg.value = res.message || '加载仪表盘失败'
+      const msg = res.message || '加载仪表盘失败'
+      errorMsg.value = msg.includes('未登录')
+        ? `${msg}，请先打开 /admin/login 使用 admin / admin123 登录`
+        : msg
       stats.value = null
     }
   } catch {
@@ -124,6 +131,42 @@ async function loadDashboard() {
 }
 
 onMounted(() => void loadDashboard())
+
+function showExportToast(msg: string) {
+  exportToast.value = msg
+  setTimeout(() => {
+    exportToast.value = ''
+  }, 2200)
+}
+
+function exportDashboard() {
+  if (!stats.value) {
+    showExportToast('暂无数据可导出，请先刷新')
+    return
+  }
+  exporting.value = true
+  void (async () => {
+    try {
+      let alertReport = null
+      try {
+        const alertRes = await adminBookAlertsReport()
+        if (alertRes.success && alertRes.data) alertReport = alertRes.data
+      } catch {
+        /* 预警数据可选 */
+      }
+      exportDashboardExcel(stats.value!, alertReport)
+      showExportToast(
+        alertReport
+          ? '已导出仪表盘及补货/断货明细 Excel'
+          : '仪表盘已导出（未获取到预警明细，请确认后端已重启）',
+      )
+    } catch {
+      showExportToast('导出失败，请重试')
+    } finally {
+      exporting.value = false
+    }
+  })()
+}
 </script>
 
 <template>
@@ -140,6 +183,10 @@ onMounted(() => void loadDashboard())
           <span class="material-symbols-outlined">dashboard</span>
           仪表盘
         </RouterLink>
+        <RouterLink to="/admin/book-alerts" :class="nc('/admin/book-alerts')">
+          <span class="material-symbols-outlined">inventory_2</span>
+          图书预警
+        </RouterLink>
         <RouterLink to="/admin/books" :class="nc('/admin/books')">
           <span class="material-symbols-outlined">menu_book</span>
           图书管理
@@ -155,6 +202,10 @@ onMounted(() => void loadDashboard())
         <RouterLink to="/admin/categories" :class="nc('/admin/categories')">
           <span class="material-symbols-outlined">category</span>
           分类管理
+        </RouterLink>
+        <RouterLink to="/admin/guestbook" :class="nc('/admin/guestbook')">
+          <span class="material-symbols-outlined">forum</span>
+          留言管理
         </RouterLink>
       </nav>
       <div class="border-t border-stone-800 p-4">
@@ -203,10 +254,28 @@ onMounted(() => void loadDashboard())
             <h2 class="font-headline-lg text-2xl text-primary">运营仪表盘</h2>
             <p class="mt-1 text-sm text-stone-500">数据来自 shop_order、customer、book、order_item 表</p>
           </div>
-          <button type="button" class="rounded-lg border border-stone-200 px-4 py-2 text-sm hover:bg-stone-50" :disabled="loading" @click="loadDashboard">
-            <span class="material-symbols-outlined align-middle text-base">refresh</span> 刷新
-          </button>
+          <div class="flex flex-wrap gap-2">
+            <button
+              type="button"
+              class="rounded-lg border border-stone-200 px-4 py-2 text-sm hover:bg-stone-50 disabled:opacity-50"
+              :disabled="loading || exporting || !stats"
+              @click="exportDashboard"
+            >
+              <span class="material-symbols-outlined align-middle text-base">download</span>
+              {{ exporting ? '导出中…' : '导出 Excel' }}
+            </button>
+            <button type="button" class="rounded-lg border border-stone-200 px-4 py-2 text-sm hover:bg-stone-50" :disabled="loading" @click="loadDashboard">
+              <span class="material-symbols-outlined align-middle text-base">refresh</span> 刷新
+            </button>
+          </div>
         </div>
+
+        <p
+          v-if="exportToast"
+          class="fixed bottom-8 left-1/2 z-50 -translate-x-1/2 rounded-full bg-stone-900 px-6 py-2 text-sm text-white shadow-lg"
+        >
+          {{ exportToast }}
+        </p>
 
         <p v-if="errorMsg" class="rounded-lg bg-error-container px-3 py-2 text-sm">{{ errorMsg }}</p>
         <p v-if="loading && !stats" class="text-sm text-stone-500">正在加载…</p>

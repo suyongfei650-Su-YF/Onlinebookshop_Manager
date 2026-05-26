@@ -2,9 +2,14 @@ import type { Router } from 'vue-router'
 import { userLogout } from '../api/user/auth'
 
 export const USER_AUTH_EVENT = 'bookshop:user-auth-changed'
+export const USER_CART_EVENT = 'bookshop:user-cart-changed'
 
 export function notifyUserAuthChanged(loggedIn: boolean) {
   window.dispatchEvent(new CustomEvent(USER_AUTH_EVENT, { detail: { loggedIn } }))
+}
+
+export function notifyUserCartChanged(cartCount?: number) {
+  window.dispatchEvent(new CustomEvent(USER_CART_EVENT, { detail: { cartCount } }))
 }
 
 /** 退出登录：调用后端销毁 Session，并跳转登录页 */

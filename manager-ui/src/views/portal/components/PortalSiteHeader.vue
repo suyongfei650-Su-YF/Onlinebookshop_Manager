@@ -20,6 +20,14 @@
         <button type="button" class="portal-nav-link hidden sm:inline" @click="goHomeSection('hot-ranking')">
           热销版本
         </button>
+        <button
+          type="button"
+          class="portal-nav-link"
+          :class="{ 'portal-nav-link--active': route.path === '/portal/guestbook' }"
+          @click="goGuestbook"
+        >
+          读者留言
+        </button>
       </nav>
     </div>
     <div class="relative z-[210] flex shrink-0 items-center gap-4 md:gap-6">
@@ -151,6 +159,11 @@ function goHomeSection(sectionId: PortalHomeSectionId) {
 function goHome() {
   if (route.path === '/portal') return
   router.push('/portal').catch(fallbackTo)
+}
+
+function goGuestbook() {
+  if (route.path === '/portal/guestbook') return
+  router.push('/portal/guestbook').catch(fallbackTo)
 }
 
 function fallbackTo(err?: unknown) {

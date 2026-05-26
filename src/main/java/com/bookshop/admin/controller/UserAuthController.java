@@ -49,7 +49,7 @@ public class UserAuthController {
             if (account.isEmpty()) return ApiResult.fail("请输入账号/邮箱/手机号");
             if (nickname.isEmpty()) return ApiResult.fail("请输入网名");
             if (password.isEmpty()) return ApiResult.fail("请输入密码");
-            if (!captchaValidator.validateAndConsume(session, req.captcha)) return ApiResult.fail("验证码错误或已过期");
+            if (!captchaValidator.validateAndConsumeUser(session, req.captcha)) return ApiResult.fail("验证码错误或已过期，请刷新后重试");
 
             Customer c = new Customer();
             c.setNickname(nickname);
@@ -83,7 +83,7 @@ public class UserAuthController {
             String account = req.account == null ? "" : req.account.trim();
             String password = req.password == null ? "" : req.password.trim();
             if (account.isEmpty() || password.isEmpty()) return ApiResult.fail("请输入账号和密码");
-            if (!captchaValidator.validateAndConsume(session, req.captcha)) return ApiResult.fail("验证码错误或已过期");
+            if (!captchaValidator.validateAndConsumeUser(session, req.captcha)) return ApiResult.fail("验证码错误或已过期，请刷新后重试");
 
             LambdaQueryWrapper<Customer> q = new LambdaQueryWrapper<>();
             if (EMAIL.matcher(account).matches()) q.eq(Customer::getEmail, account);
